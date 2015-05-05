@@ -82,7 +82,7 @@ public:
     return n0 == n1;
   }
 
-  bool opon_node_available() override {
+  bool open_node_available() override {
     return !open_list_.is_empty();
   }
 
@@ -141,6 +141,7 @@ public:
       node(p)->state_ = NodeState::result;
       p = node(p)->parent_->c_;
     }
+
     node(n)->state_ = NodeState::goal;
     node(p)->state_ = NodeState::start;
     return path;

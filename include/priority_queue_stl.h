@@ -31,10 +31,13 @@ public:
     return e;
   }
 
-  int find(const ElementType e) {
+  int find(const ElementType e) override {
     typename vector<ElementType>::iterator i =
         std::find(queue_.begin(), queue_.end(), e);
-    return i - queue_.begin();
+    if (i == queue_.end())
+      return -1;
+    else
+      return i - queue_.begin();
   }
 
   // Here we assume the STL uses a binary heap, and its algorithm matches our

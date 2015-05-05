@@ -38,7 +38,11 @@ public:
   }
 
   int find(const ElementType e) {
-    return (std::find(queue_.begin(), queue_.end(), e) - queue_.begin());
+    auto r = std::find(queue_.begin(), queue_.end(), e);
+    if (r == queue_.end())
+      return -1;
+    else
+      return (r - queue_.begin());
   }
 
   void increase_priority(ElementType e, PriorityType p) {

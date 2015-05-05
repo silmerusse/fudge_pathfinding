@@ -1,3 +1,4 @@
+#include <memory>
 #include <iostream>
 #include "sliding_puzzle_map.h"
 #include "astar_search.h"
@@ -14,8 +15,8 @@ int main (int argc, char *argv[]) {
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  for (auto e : path)
-    std::cout << e.first << " f:" << e.second << std::endl;
+  for (auto i = path.rbegin(); i != path.rend() ; ++i)
+    std::cout << i->first << " f:" << i->second << std::endl;
   std::cout << map.to_string() << std::endl;
 
   return 0;

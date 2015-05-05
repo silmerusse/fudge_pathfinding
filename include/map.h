@@ -20,7 +20,7 @@ public:
 
   // Checks
   virtual bool nodes_equal(const NodeType &n0, const NodeType &n1) const = 0;
-  virtual bool opon_node_available() = 0;
+  virtual bool open_node_available() = 0;
   virtual bool node_unexplored(const NodeType &n) const = 0;
   virtual bool node_open(const NodeType &n) const = 0;
 

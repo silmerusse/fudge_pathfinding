@@ -31,7 +31,7 @@ public:
     if (i <= threshold_)
       hot_.insert(n);
     else {
-      while (cold_.size() < i - threshold_) {
+      while (static_cast<int>(cold_.size()) < i - threshold_) {
         vector<ElementType> v;
         cold_.push_back(v);
       }
@@ -62,14 +62,17 @@ public:
     return hot_.remove_front();
   }
 
-  int find(const ElementType n) {
+  int find(const ElementType n) override {
     int i = PriorityHandler::get_priority(n) / kc_;
     if (i <= threshold_) {
       return hot_.find(n);
     } else {
       int bucket = i - threshold_ - 1;
-      return std::find(cold_[bucket].begin(), cold_[bucket].end(), n)
-          - cold_[bucket].begin();
+      auto r = std::find(cold_[bucket].begin(), cold_[bucket].end(), n);
+      if (r == cold_[bucket].end())
+        return -1;
+      else
+        return r - cold_[bucket].begin();
     }
   }
 

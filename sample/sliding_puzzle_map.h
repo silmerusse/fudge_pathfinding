@@ -61,7 +61,7 @@ public:
 public:
   // Override to return edges with destination nodes according to four moves.
   const vector<Edge<NodeType, int>> edges (
-                                        const pair<string, int> &n) override {
+                                        const NodeType &n) override {
     vector<Edge<NodeType, int>> es;
     int i = n.first.find(kHole);
     int x = i%w_;
@@ -110,7 +110,7 @@ public:
       return false;
   }
 
-  bool opon_node_available() override {
+  bool open_node_available() override {
     return !(open_list_.is_empty());
   }
 
@@ -161,6 +161,7 @@ public:
       state_map_[p] = NodeState::result;
       p = parent_map_[p];
     }
+		path.push_back(std::make_pair(p, cost_map_[p]));
     return path;
   }
 

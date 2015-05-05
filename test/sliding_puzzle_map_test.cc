@@ -11,9 +11,9 @@ void print_result(const vector<pair<string, int>> &path,
                   const SlidingPuzzleMap &map){
   std::cout << "--------------------\n";
   ostringstream ss;
-  for (auto e : path)
-    ss << e.first << ',' << e.second << '\n';
-  ss << map.stats_.to_string() << '\n';
+  for (auto i = path.rbegin(); i != path.rend(); ++i)
+    ss << i->first << ',' << i->second << std::endl;
+  ss << map.stats_.to_string() << std::endl;
   std::cout << ss.str();
 }
 
@@ -47,7 +47,7 @@ TEST(SlidingPuzzleMap, search_3x3_found) {
 
   print_result(path, map);
 
-  ASSERT_EQ(30, path.size());
+  ASSERT_EQ(31, path.size());
 }
 
 TEST(SlidingPuzzleMap, search_4x4_found) {
@@ -65,6 +65,6 @@ TEST(SlidingPuzzleMap, search_4x4_found) {
 
   print_result(path, map);
 
-  ASSERT_EQ(6, path.size());
+  ASSERT_EQ(7, path.size());
 }
 

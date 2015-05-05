@@ -15,8 +15,8 @@ int main (int argc, char *argv[]) {
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  for (auto e : path)
-    std::cout << map.node(e)->to_string() << std::endl;
+  for (auto i = path.rbegin(); i != path.rend(); ++i)
+    std::cout << map.node(*i)->to_string() << std::endl;
   std::cout << map.to_string() << std::endl;
 
   return 0;

@@ -10,9 +10,9 @@ const string print_result(const vector<Coord> &path,
                           const JumpPointMap<double> &map) {
   std::cout << "--------------------\n";
   ostringstream ss;
-  for (auto e : path)
-    ss << map.node(e)->to_string() << '\n';
-  ss << map.to_string() << '\n';
+  for (auto i = path.rbegin(); i != path.rend(); ++i)
+    ss << map.node(*i)->to_string() << std::endl;
+  ss << map.to_string() << std::endl;
   std::cout << ss.str();
   return ss.str();
 }
@@ -109,33 +109,33 @@ TEST(JumpPointMap, search_10x10_wall) {
   string result = print_result(path, map);
 
   string expected = string("") +
-  "(4,1)<-(3,1) g:22.7287 f:22.7287" + "\n" +
-  "(3,1)<-(0,4) g:21.7287 f:22.7287" + "\n" +
-  "(0,4)<-(3,7) g:17.4858 f:22.7287" + "\n" +
-  "(3,7)<-(4,7) g:13.2429 f:19.6572" + "\n" +
-  "(4,7)<-(5,8) g:12.2429 f:18.2429" + "\n" +
-  "(5,8)<-(7,8) g:10.8286 f:18.2429" + "\n" +
-  "(7,8)<-(8,7) g:8.8286 f:17.0715" + "\n" +
-  "(8,7)<-(8,1) g:7.4143 f:15.0715" + "\n" +
-  "(8,1)<-(7,0) g:1.4143 f:5.4143" + "\n" +
-  "  nodes opened:14" + "\n" +
-  "  nodes closed:14" + "\n" +
-  "  nodes priority increased:1" + "\n" +
-  "  nodes reopened:0" + "\n" +
-  "" + "\n" +
-  "     x S  " + "\n" +
-  "   @Gx  @ " + "\n" +
-  "   xxxx   " + "\n" +
-  "   x  xx  " + "\n" +
-  "@xxx - x  " + "\n" +
-  "   x-x-x  " + "\n" +
-  "   x x x  " + "\n" +
-  "   @@x-x@ " + "\n" +
-  "     @ @  " + "\n" +
-  "          " + "\n" +
-  "\n";
+      "(8,1)<-(7,0) g:1.4143 f:5.4143" + "\n" +
+      "(8,7)<-(8,1) g:7.4143 f:15.0715" + "\n" +
+      "(7,8)<-(8,7) g:8.8286 f:17.0715" + "\n" +
+      "(5,8)<-(7,8) g:10.8286 f:18.2429" + "\n" +
+      "(4,7)<-(5,8) g:12.2429 f:18.2429" + "\n" +
+      "(3,7)<-(4,7) g:13.2429 f:19.6572" + "\n" +
+      "(0,4)<-(3,7) g:17.4858 f:22.7287" + "\n" +
+      "(3,1)<-(0,4) g:21.7287 f:22.7287" + "\n" +
+      "(4,1)<-(3,1) g:22.7287 f:22.7287" + "\n" +
+      "  nodes opened:14" + "\n" +
+      "  nodes closed:14" + "\n" +
+      "  nodes priority increased:1" + "\n" +
+      "  nodes reopened:0" + "\n" +
+      "" + "\n" +
+      "     x S  " + "\n" +
+      "   @Gx  @ " + "\n" +
+      "   xxxx   " + "\n" +
+      "   x  xx  " + "\n" +
+      "@xxx - x  " + "\n" +
+      "   x-x-x  " + "\n" +
+      "   x x x  " + "\n" +
+      "   @@x-x@ " + "\n" +
+      "     @ @  " + "\n" +
+      "          " + "\n" +
+      "\n";
 
-    ASSERT_EQ(expected, result);
+  ASSERT_EQ(expected, result);
 
 }
 

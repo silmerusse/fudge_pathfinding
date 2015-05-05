@@ -17,7 +17,7 @@ public:
     map.initialize(start, goal);
     map.open_node(start, 0, heuristic(start, goal), start); // Get started.
 
-    while (map.opon_node_available()) {
+    while (map.open_node_available()) {
       NodeType top_node = map.close_front_open_node();
 
       if (map.nodes_equal(top_node, goal))

@@ -1,5 +1,5 @@
 CXX := g++
-CCFLAGS := -O3 -I../../include/util -I../include -std=c++0x
+CCFLAGS := -O3 -I../include/util -I../include -I../sample -std=c++0x
 LDFLAGS := -lgtest -lgtest_main -lpthread
 TARGETS := pathfinding_test 
 SOURCES := $(wildcard *_test.cc)
