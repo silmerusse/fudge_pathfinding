@@ -4,11 +4,9 @@
 #include <algorithm>
 #include <sstream>
 #include <string>
-
 #include "node_state.h"
 #include "map.h"
 
-using namespace std;
 using Coord=pair<int,int>;
 
 // This represents a node in a tiled grid map that holds cost, state,
@@ -21,7 +19,7 @@ public:
   GridNode() {};
 
 public:
-  Coord c_ {-1, -1};
+  Coord c_ = {-1, -1};
   CostType g_ = -1; // cost from start to current
   CostType f_ = -1; // total cost (current + estimated)
   NodeState state_ = NodeState::unexplored;
@@ -30,11 +28,11 @@ public:
   GridNode *parent_ = nullptr;
 
 public:
-  static bool less_priority(const GridNode *a, const GridNode *b) {
+  static constexpr bool less_priority(const GridNode *a, const GridNode *b) {
     return a->f_ - b->f_ > 0.00001;
   }
 
-  static double get_priority(const GridNode *a) {
+  static constexpr double get_priority(const GridNode *a) {
     return a->f_;
   }
 
@@ -43,11 +41,11 @@ public:
   }
 
 public:
-  int x() const {
+  constexpr int x() {
     return c_.first;
   }
 
-  int y() const {
+  constexpr int y() {
     return c_.second;
   }
 
@@ -60,17 +58,19 @@ public:
   }
 
 public:
-  friend std::ostream& operator <<(std::ostream &out, GridNode<CostType> const &n) {
+  friend std::ostream& operator <<(std::ostream &out,
+                                   GridNode<CostType> const &n) {
     out << n.f_;
     return out;
   }
 
-  friend std::ostream& operator <<(std::ostream &out, GridNode<CostType>* const &n) {
+  friend std::ostream& operator <<(std::ostream &out,
+                                   GridNode<CostType>* const &n) {
     out << n->f_;
     return out;
   }
 
-  const string to_string() const {
+  const std::string to_string() const {
     ostringstream ss;
     ss << "(" << x() << "," << y() << ")"
        << "<-(" << (parent_ != nullptr ? parent_->x() : -1)

@@ -9,13 +9,11 @@
 #include "priority_queue.h"
 #include "up_heap.h"
 
-using namespace std;
-
 // This is an implementation of priority queue based on STL's heap functions
-// like make_heap(), push_heap() and pop_heap(). It implemented an
+// like make_heap(), push_heap() and pop_heap(). It implements an
 // "increase priority" operation (percolate up), with the assumption that the
 // STL implementation uses binary heap(tree) algorithm. An alternate safe but
-// slow implementation using make_heap() is also provided by comments.
+// slow implementation using make_heap() is also provided for reference.
 template <typename ElementType, typename PriorityType, typename PriorityHandler>
 class PriorityQueueSTL : public PriorityQueue<ElementType, PriorityType> {
 public:
@@ -31,8 +29,13 @@ public:
     return e;
   }
 
+  ElementType front() override {
+    ElementType e = queue_.front();
+    return e;
+  }
+
   int find(const ElementType e) override {
-    typename vector<ElementType>::iterator i =
+    typename std::vector<ElementType>::iterator i =
         std::find(queue_.begin(), queue_.end(), e);
     if (i == queue_.end())
       return -1;
@@ -49,9 +52,9 @@ public:
     int i = find(e);
     PriorityHandler::set_priority(queue_[i], p);
 
-    up_heap<vector<ElementType>, ElementType,
-                  decltype(PriorityHandler::less_priority)>(queue_, i,
-                                            PriorityHandler::less_priority);
+    up_heap<std::vector<ElementType>, ElementType,
+        decltype(PriorityHandler::less_priority)>(
+            queue_, i, PriorityHandler::less_priority);
   }
 
   bool is_empty() override {
@@ -62,8 +65,12 @@ public:
     queue_.clear();
   }
 
+  std::size_t size() const override {
+    return queue_.size();
+  }
+
 public:
-  vector<ElementType> queue_;
+  std::vector<ElementType> queue_;
 };
 
 #endif /* PRIORITY_QUEUE_STL_H_ */

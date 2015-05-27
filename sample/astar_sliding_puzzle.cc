@@ -4,12 +4,20 @@
 #include "astar_search.h"
 #include "time_util.h"
 
+// There's a puzzle with initial position like this:
+// 876
+// 543
+// 210
+// We want to solve the puzzle with the target position as follows:
+// 123
+// 456
+// 780
 int main (int argc, char *argv[]) {
   PREPARE_TIMER
   START_TIMER
   SlidingPuzzleMap map(3);
-  vector<pair<string, int>> &&path = AStarSearch::search(map,
-      make_pair(string("876543210"), 0), make_pair(string("123456780"), 0),
+  vector<pair<string, int>> &&path = AStarSearch::search(
+      map, make_pair(string("876543210"), 0), make_pair(string("123456780"), 0),
       std::bind(&SlidingPuzzleMap::manhattan_distance, map,
           placeholders::_1, placeholders::_2));
   END_TIMER

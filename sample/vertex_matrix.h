@@ -5,13 +5,12 @@
 #include <string>
 #include <sstream>
 
-using namespace std;
 using Coord = pair<int,int>;
 
 template<typename WeightType>
 class VertexMatrix {
 public:
-  VertexMatrix(int width, int height, const vector<WeightType> &matrix)
+  VertexMatrix(int width, int height, const std::vector<WeightType> &matrix)
        : width_(width), height_(height), matrix_(matrix) {}
   virtual ~VertexMatrix() {}
 
@@ -35,7 +34,7 @@ public:
         weight(coord) >= 0 && weight(coord) <= threhold);
   }
 
-  const string to_string() const {
+  const std::string to_string() const {
     ostringstream ss;
     ss << "Vertex Matrix:" << endl;
 
@@ -59,7 +58,7 @@ public:
   }
 
 private:
-  const vector<WeightType> &matrix_;
+  const std::vector<WeightType> &matrix_;
 };
 
 

@@ -9,7 +9,7 @@
 const string print_result(const vector<Coord> &path,
                           const JumpPointMap<double> &map) {
   std::cout << "--------------------\n";
-  ostringstream ss;
+  std::ostringstream ss;
   for (auto i = path.rbegin(); i != path.rend(); ++i)
     ss << map.node(*i)->to_string() << std::endl;
   ss << map.to_string() << std::endl;
@@ -25,6 +25,7 @@ TEST(JumpPointMap, search_10x10) {
   PREPARE_TIMER
   START_TIMER
     JumpPointMap<double> map(10, 10, matrix);
+    map.goal_ = Coord(9, 9);
     vector<Coord> &&path = AStarSearch::search(map,
                                           Coord(0, 0), Coord(9, 9),
                                           GridMap<double>::diagonal_distance);
@@ -60,6 +61,7 @@ TEST(JumpPointMap, search_10x10) {
    */
   START_TIMER
     JumpPointMap<double> map2(10, 10, matrix);
+    map2.goal_ = Coord(0, 9);
     path = AStarSearch::search(map2, Coord(9, 0), Coord(0, 9),
                                GridMap<double>::duclidean_distance);
 
@@ -100,9 +102,10 @@ TEST(JumpPointMap, search_10x10_wall) {
   PREPARE_TIMER
   START_TIMER
     JumpPointMap<double> map(10, 10, matrix2);
-    vector<Coord> &&path = AStarSearch::search(map,
-                                            Coord(7, 0), Coord(4, 1),
-                                            GridMap<double>::diagonal_distance);
+  map.goal_ = Coord(4, 1);
+    vector<Coord> &&path = AStarSearch::search(
+        map, Coord(7, 0), Coord(4, 1),
+        GridMap<double>::diagonal_distance);
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -146,9 +149,10 @@ TEST(JumpPointMap, search_100x100) {
   PREPARE_TIMER
   START_TIMER
     JumpPointMap<double> map(100, 100, matrix2);
-    vector<Coord> &&path = AStarSearch::search(map,
-                                          Coord(0, 0), Coord(99, 99),
-                                          GridMap<double>::diagonal_distance);
+    map.goal_ = Coord(99, 99);
+    vector<Coord> &&path = AStarSearch::search(
+        map, Coord(0, 0), Coord(99, 99),
+        GridMap<double>::diagonal_distance);
   END_TIMER
   PRINT_TIME_ELAPSED
 

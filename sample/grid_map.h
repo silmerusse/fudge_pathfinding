@@ -2,10 +2,7 @@
 #define GRID_MAP_H_
 
 #include <algorithm>
-
-#define LOG_LEVEL 2
 #include "log.h"
-
 #include "node_state.h"
 #include "map.h"
 #include "vertex_matrix.h"
@@ -14,88 +11,86 @@
 #include "hot_queue.h"
 #include "search_stats.h"
 
-using NodeType = Coord;
-
 // This implements a square tile based grid map.
-// It takes a template argument to support different cost type like int and
-// double.
-// To create a map, a matrix that holds vertex data should be passed.
-// Note a map should not be reused after a search. We need to clean all data
-// structures anyway. Let's just create a new map.
+// It could accept different cost type like int and double.
+// By default diagonal move is allowed.
 template <typename CostType = double>
 class GridMap : public Map<Coord, CostType> {
 
 public:
-  GridMap(int w, int h, const vector<CostType> &matrix)
-      : vertex_matrix_(w, h, matrix),
-        node_array_(w, h) {};
-  virtual ~GridMap() {};
+  GridMap(int w, int h, const vector<CostType> &matrix,
+          bool enable_diagonal = true):
+    vertex_matrix_(w, h, matrix), node_array_(w, h),
+    enable_diagonal_(enable_diagonal) {};
+  virtual ~GridMap() = default;
 
 public:
   static constexpr CostType kDiagonalEdgeWeight = static_cast<CostType>(1.4143);
   static constexpr CostType kStraightEdgeWeight = static_cast<CostType>(1.0);
 
 public:
-  static CostType manhattan_distance(const NodeType &n0, const NodeType &n1) {
+  static constexpr CostType manhattan_distance(
+      const Coord &n0, const Coord &n1) {
     return static_cast<CostType>(
         abs(x(n1) - x(n0)) + abs(y(n1) - y(n0)));
   }
 
-  static CostType diagonal_distance(const NodeType &n0, const NodeType &n1) {
+  static CostType diagonal_distance (const Coord &n0, const Coord &n1) {
     int dx = abs(x(n1) - x(n0));
     int dy = abs(y(n1) - y(n0));
     int dmin = min(dx, dy);
     int dmax = max(dx, dy);
-    return static_cast<CostType>(dmin * kDiagonalEdgeWeight
-                                 + (dmax - dmin) * kStraightEdgeWeight);
+    return static_cast<CostType>((dmin * kDiagonalEdgeWeight) +
+                                 (dmax - dmin) * kStraightEdgeWeight);
   }
 
-  static CostType duclidean_distance(const NodeType &n0, const NodeType &n1) {
+  static CostType duclidean_distance(const Coord &n0, const Coord &n1) {
     int dx = abs(x(n1) - x(n0));
     int dy = abs(y(n1) - y(n0));
     return static_cast<CostType>(sqrt(dx*dx + dy*dy));
   }
 
 public:
-  void initialize(const NodeType &start, const NodeType &goal) override {
-  }
-
-  CostType current_cost(const NodeType &n) const override {
+  virtual CostType current_cost(const Coord &n) const override {
     return node(n)->g_;
   }
 
-  const vector<Edge<NodeType, CostType>> edges(const NodeType &n) override {
-    vector <Edge<NodeType, CostType>> es;
+  virtual const vector<Edge<Coord, CostType>> edges(Coord &n) override {
+    vector <Edge<Coord, CostType>> es;
+    vector<Coord> coords;
 
-    const vector<Coord> &&coords = coord_neighbors(n);
+    if (enable_diagonal_)
+      coords = std::move(coord_8_neighbors(n));
+    else
+      coords = std::move(coord_4_neighbors(n));
 
     for (auto c : coords) {
       if (vertex_matrix_.is_passable(c)) {
-        es.push_back(Edge<NodeType, CostType>(n, c, edge_cost(n, c)));
+        es.push_back(Edge<Coord, CostType>(n, c, edge_cost(n, c)));
       }
     }
 
     return es;
   }
 
-  bool nodes_equal(const NodeType &n0, const NodeType &n1) const override {
+  virtual bool nodes_equal(const Coord &n0, const Coord &n1) const override {
     return n0 == n1;
   }
 
-  bool open_node_available() override {
+  virtual bool open_node_available() override {
     return !open_list_.is_empty();
   }
 
-  bool node_unexplored(const NodeType &n) const override {
+  virtual bool node_unexplored(const Coord &n) const override {
     return node(n)->state_ == NodeState::unexplored;
   }
 
-  bool node_open(const NodeType &n) const override {
+  virtual bool node_open(const Coord &n) const override {
     return node(n)->state_ == NodeState::open;
   }
 
-  void open_node(NodeType &n, CostType g, CostType h,
-                 const NodeType &p) override {
+  virtual void open_node(Coord &n, CostType g, CostType h,
+                         const Coord &p) override {
     node(n)->parent_ = node(p);
     node(n)->g_ = g;
     node(n)->f_ = g + h;
@@ -105,8 +100,8 @@ public:
     DEBUG("node inserted: %s", node(n)->to_string().c_str());
   }
 
-  void reopen_node(NodeType &n, CostType g, CostType h,
-                   const NodeType &p) override {
+  virtual void reopen_node(Coord &n, CostType g, CostType h,
+                           const Coord &p) override {
     node(n)->parent_ = node(p);
     node(n)->g_ = g;
     node(n)->f_ = g + h;
@@ -116,7 +111,7 @@ public:
     DEBUG("node reopened: %s", node(n)->to_string().c_str());
   }
 
-  NodeType close_front_open_node() override {
+  Coord close_front_open_node() override {
     GridNode<CostType> *gn = open_list_.remove_front();
     gn->state_ = NodeState::closed;
     stats_.nodes_closed++;
@@ -124,8 +119,8 @@ public:
     return gn->c_;
   }
 
-  void increase_node_priority(NodeType &n, CostType g, CostType h,
-                              const NodeType &p) override {
+  virtual void increase_node_priority(Coord &n, CostType g, CostType h,
+                                      const Coord &p) override {
     node(n)->parent_ = node(p);
     node(n)->g_ = g;
     open_list_.increase_priority(node(n), g + h);
@@ -133,9 +128,9 @@ public:
     DEBUG("node priority increased: %s", node(n)->to_string().c_str());
   }
 
-  vector<NodeType> get_path(const NodeType &n) override {
-    vector<NodeType> path;
-    NodeType p = n;
+  virtual vector<Coord> get_path(const Coord &n) override {
+    vector<Coord> path;
+    Coord p = n;
     while (node(p)->parent_->c_ != p){
       path.push_back(p);
       node(p)->state_ = NodeState::result;
@@ -148,17 +143,17 @@ public:
   }
 
 public:
-  GridNode<CostType>* node(const NodeType &n) const {
+  GridNode<CostType>* node(const Coord &n) const {
     return node_array_.node(n);
   }
 
   const string to_string() const {
-    static char syms[] = {
+    static constexpr char syms[] = {
         ' ', 'o', '-', '@','S','G'
     };
 
     ostringstream ss;
-    ss << stats_.to_string() + "\n";
+    ss << stats_.to_string() << std::endl;
 
     for (int i=0; i < node_array_.h_; i++) {
       for (int j=0; j < node_array_.w_; j++) {
@@ -171,7 +166,7 @@ public:
         }
         ss << c;
       }
-      ss << '\n';
+      ss << std::endl;
     }
     return ss.str();
   }
@@ -184,17 +179,38 @@ protected:
   GridNodeArray<CostType> node_array_;
   HotQueue<GridNode<CostType>*, CostType, GridNode<CostType>,
       BinaryHeap<GridNode<CostType>*, CostType, GridNode<CostType>>> open_list_;
+  bool enable_diagonal_;
 
 protected:
-  static constexpr int x(const NodeType &n) {
+  static constexpr int x(const Coord &n) {
     return n.first;
   }
-  static constexpr int y(const NodeType &n) {
+  static constexpr int y(const Coord &n) {
     return n.second;
   }
 
 protected:
-  static const vector<Coord> coord_neighbors(const Coord c) {
+  static const vector<Coord> coord_4_neighbors(const Coord c) {
+    static constexpr int x_offsets_[9] {
+            0,
+        -1,    1,
+            0,
+    };
+
+    static constexpr int y_offsets_[9] {
+           -1,
+         0,    0,
+            1,
+    };
+
+    vector<Coord> cs;
+    for (int i=0; i < 4; i++) {
+      cs.push_back(Coord(c.first + x_offsets_[i], c.second + y_offsets_[i]));
+    }
+    return cs;
+  }
+
+  static const vector<Coord> coord_8_neighbors(const Coord c) {
     static constexpr int x_offsets_[9] {
         -1, 0, 1,
         -1,    1,
@@ -214,7 +230,7 @@ protected:
     return cs;
   }
 
-  static const CostType edge_weight(Coord c0, Coord c1) {
+  static CostType edge_weight(Coord c0, Coord c1) {
     int d = abs(y(c1) - y(c0)) + abs(x(c1) - x(c0));
 
     if (d == 2)
@@ -227,7 +243,7 @@ protected:
   }
 
 protected:
-  CostType edge_cost(const NodeType &n0, const NodeType &n1) const {
+  CostType edge_cost(const Coord &n0, const Coord &n1) const {
     return vertex_matrix_.weight(n1) * edge_weight(n0, n1);
   }
 

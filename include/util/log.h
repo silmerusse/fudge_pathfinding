@@ -1,6 +1,8 @@
 #ifndef LOG_H_
 #define LOG_H_
 
+#define LOG_LEVEL 2
+
 #if LOG_LEVEL == 0
 #define DEBUG(...) do { \
   fprintf(stdout, "[D] "); \
@@ -19,6 +21,26 @@
 } while (0)
 #else
 #define INFO(...) ((void)0)
+#endif
+
+#if LOG_LEVEL <= 2
+#define WARN(...) do { \
+  fprintf(stdout, "[W] "); \
+  fprintf(stdout, __VA_ARGS__); \
+  fprintf(stdout,"\n"); \
+} while (0)
+#else
+#define WARN(...) ((void)0)
+#endif
+
+#if LOG_LEVEL <= 3
+#define ERROR(...) do { \
+  fprintf(stdout, "[E] "); \
+  fprintf(stdout, __VA_ARGS__); \
+  fprintf(stdout,"\n"); \
+} while (0)
+#else
+#define ERROR(...) ((void)0)
 #endif
 
 #endif /* LOG_H_ */

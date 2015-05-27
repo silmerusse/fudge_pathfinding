@@ -6,7 +6,6 @@
 #include <utility>
 #include <sstream>
 
-#define LOG_LEVEL 2
 #include "log.h"
 
 #include "search_stats.h"
@@ -23,7 +22,7 @@ public:
   WaterJugNode() {};
 
 public:
-  bool operator == (const WaterJugNode &n) {
+  bool operator == (const WaterJugNode &n) const {
     return state_ == n.state_;
   }
 
@@ -33,7 +32,7 @@ public:
 
 public:
   const std::string to_string() const {
-    std::stringstream ss;
+    std::ostringstream ss;
     for (auto e : state_) {
       ss << e << ',';
     }
@@ -67,9 +66,7 @@ public:
   }
 
 public:
-  // Override to return edges with destination nodes according to four moves.
-  const std::vector<Edge<NodeType, int>> edges (
-                                        const NodeType &n) override {
+  const std::vector<Edge<NodeType, int>> edges (NodeType &n) override {
     std::vector<Edge<NodeType, int>> edges;
 
     for (auto i = n.state_.begin(); i != n.state_.end(); ++i) {
@@ -99,10 +96,6 @@ public:
     return edges;
   }
 
-  // Not used.
-  void initialize (const NodeType &start, const NodeType &end) override {
-  }
-
   int current_cost(const NodeType &k) const override {
     return k.cost_;
   }
@@ -113,7 +106,6 @@ public:
 
   bool node_unexplored(const NodeType &n) const override {
     return (state_map_.find(n.state_) == state_map_.end());
-    //return state_map_.at(n.state_) == NodeState::unexplored;
   }
 
   bool node_open(const NodeType &n) const override {
@@ -147,7 +139,7 @@ public:
     NodeType n = open_list_.remove_front();
     state_map_[n.state_] = NodeState::closed;
     stats_.nodes_closed++;
-    DEBUG("front node removed: %s, %d", n.to_string(), n.cost_);
+    DEBUG("front node removed: %s, %d", n.to_string().c_str(), n.cost_);
     return n;
   }
 
@@ -157,7 +149,7 @@ public:
     n.cost_ = g + h;
     open_list_.increase_priority(n, g + h);
     stats_.nodes_priority_increased++;
-    DEBUG("node priority increased: %s, %d", n.to_string(), n.cost_);
+    DEBUG("node priority increased: %s, %d", n.to_string().c_str(), n.cost_);
   }
 
   std::vector<NodeType> get_path(const NodeType &n) override {

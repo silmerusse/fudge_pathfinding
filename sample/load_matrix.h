@@ -4,30 +4,29 @@
 #include <string>
 #include <vector>
 #include <fstream>
-
-using namespace std;
+#include "log.h"
 
 template <typename WeightType>
-static vector<WeightType> load_matrix(const string &filename) {
-  vector<WeightType> v;
+static std::vector<WeightType> load_matrix(const std::string &filename) {
+  std::vector<WeightType> v;
 
-  ifstream ifs(filename);
+  std::ifstream ifs(filename);
   if(ifs.is_open()) {
     while(ifs.good()) {
-      string line;
+      std::string line;
       getline(ifs, line);
-      stringstream ss(line);
-      string s;
+      std::istringstream ss(line);
+      std::string s;
       while (getline(ss, s, ',' )
           && s.find_first_not_of(" \t\r\n") != s.npos ) {
-        stringstream is(s);
+        std::istringstream is(s);
         WeightType i;
         is >> i;
         v.push_back(i);
       }
     }
   } else {
-    printf("File not found.\n");
+    ERROR("File not found.\n");
   }
   return v;
 }

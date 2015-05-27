@@ -13,6 +13,9 @@ public:
   // Remove the node with highest priority and return it.
   virtual N remove_front() = 0;
 
+  // Return node with highest priority.
+  virtual N front() = 0;
+
   // Find the node and return its index.
   virtual int find(const N) = 0;
 
@@ -24,6 +27,9 @@ public:
 
   // Clear the list.
   virtual void clear() = 0;
+
+  // Count of nodes.
+  virtual std::size_t size() const = 0;
 };
 
 

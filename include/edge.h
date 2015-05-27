@@ -9,6 +9,12 @@ public:
   virtual ~Edge() {};
 
 public:
+  bool operator ==(const Edge &e) const {
+    return e.from_ == from_ && e.to_ == to_ && e.cost_ == cost_;
+  }
+
+
+public:
   NodeType from_;
   NodeType to_;
   CostType cost_;

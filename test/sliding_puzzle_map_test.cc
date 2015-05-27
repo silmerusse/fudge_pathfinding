@@ -17,6 +17,7 @@ void print_result(const vector<pair<string, int>> &path,
   std::cout << ss.str();
 }
 
+// Test if the puzzle is not solvable.
 TEST(SlidingPuzzleMap, search_2x2_not_found) {
   PREPARE_TIMER
   START_TIMER
@@ -34,6 +35,7 @@ TEST(SlidingPuzzleMap, search_2x2_not_found) {
   ASSERT_EQ(12, map.stats_.nodes_opened); // invalid positions == (N*M)!/2
 }
 
+// Test a 3x3 puzzle.
 TEST(SlidingPuzzleMap, search_3x3_found) {
   PREPARE_TIMER
   START_TIMER
@@ -50,6 +52,7 @@ TEST(SlidingPuzzleMap, search_3x3_found) {
   ASSERT_EQ(31, path.size());
 }
 
+// Test a 4x4 puzzle.
 TEST(SlidingPuzzleMap, search_4x4_found) {
   PREPARE_TIMER
   START_TIMER

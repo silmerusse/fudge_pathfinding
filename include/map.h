@@ -16,7 +16,7 @@ public:
   virtual CostType current_cost(const NodeType &n) const = 0;
 
   // Return valid edges that connect to nodes could be explored.
-  virtual const vector<Edge<NodeType, CostType> > edges (const NodeType &n) = 0;
+  virtual const vector<Edge<NodeType, CostType> > edges (NodeType &n) = 0;
 
   // Checks
   virtual bool nodes_equal(const NodeType &n0, const NodeType &n1) const = 0;
@@ -32,9 +32,6 @@ public:
   virtual NodeType close_front_open_node() = 0;
   virtual void increase_node_priority(NodeType &n, CostType g, CostType h,
                                       const NodeType &p) = 0;
-
-  // Do some initialization work before the search get started.
-  virtual void initialize(const NodeType &start, const NodeType &goal) = 0;
 
   // Return the result of path found.
   virtual vector<NodeType> get_path(const NodeType &n) = 0;

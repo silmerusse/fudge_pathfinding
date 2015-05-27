@@ -4,8 +4,6 @@
 #include <string>
 #include <sstream>
 
-using namespace std;
-
 class SearchStats
 {
 public:
@@ -22,8 +20,8 @@ public:
     nodes_priority_increased = 0;
   }
 
-  const string to_string() const {
-    stringstream ss;
+  const std::string to_string() const {
+    std::ostringstream ss;
     ss << "  nodes opened:" << nodes_opened << '\n'
        << "  nodes closed:" << nodes_closed << '\n'
        << "  nodes priority increased:" << nodes_priority_increased << '\n'

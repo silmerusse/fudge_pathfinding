@@ -7,8 +7,6 @@
 #include <algorithm>
 #include "priority_queue.h"
 
-using namespace std;
-
 // This is an implementation of binary heap, without using STL's priority queue
 // adaptor or heap functions like make_heap(), push_heap(), pop_heap().
 template <typename ElementType, typename PriorityType, typename PriorityHandler>
@@ -18,7 +16,7 @@ public:
   virtual ~BinaryHeap() {};
 
 public:
-  vector<ElementType> queue_;
+  std::vector<ElementType> queue_;
 
 public:
 
@@ -34,6 +32,12 @@ public:
     queue_.pop_back();
 
     down(0);
+    return front;
+  }
+
+  ElementType front() {
+    ElementType front = queue_[0];
+    queue_[0] =  queue_.back();
     return front;
   }
 
@@ -94,6 +98,10 @@ public:
     }
     queue_[hole] = value;
     up(hole);
+  }
+
+  std::size_t size() const override {
+    return queue_.size();
   }
 
 };

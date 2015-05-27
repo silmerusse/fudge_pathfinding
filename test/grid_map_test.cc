@@ -122,5 +122,41 @@ TEST(GridMap, search_100x100) {
 
 }
 
+// Test search paths of 2 targets by reusing the map.
+// The second round that reuse intermediate result would open less nodes.
+TEST(GridMap, search_10x10_2_targets) {
+  vector<double> matrix = load_matrix<double>("../data/matrix_10x10_wall.txt");
+
+  // Round 1. Direct search.
+  PREPARE_TIMER
+  START_TIMER
+    GridMap<double> map0(10, 10, matrix);
+    vector<Coord> &&path0 = AStarSearch::search(map0, Coord(0, 0), Coord(9, 9),
+                                          GridMap<double>::diagonal_distance);
+  END_TIMER
+  PRINT_TIME_ELAPSED
+  string result0 = print_result(path0, map0);
+
+  // Round 2. Start by searching a intermediate path.
+  START_TIMER
+    GridMap<double> map1(10, 10, matrix);
+    vector<Coord> &&path1 = AStarSearch::search(map1, Coord(0, 0), Coord(4, 4),
+                                          GridMap<double>::diagonal_distance);
+  END_TIMER
+  PRINT_TIME_ELAPSED
+  string result1 = print_result(path1, map1);
+
+  // Reuse map.
+  map1.stats_.reset();
+  START_TIMER
+    vector<Coord> &&path2 = AStarSearch::search(map1, Coord(0, 0), Coord(9, 9),
+                                          GridMap<double>::diagonal_distance);
+  END_TIMER
+  PRINT_TIME_ELAPSED
+  string result2 = print_result(path2, map1);
 
 
+  ASSERT_EQ(46, map0.stats_.nodes_opened);
+  ASSERT_EQ(23, map1.stats_.nodes_opened);
+
+}

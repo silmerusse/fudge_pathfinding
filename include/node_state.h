@@ -8,6 +8,8 @@ enum NodeState {
   result      = 3,
   start       = 4,
   goal        = 5,
+  reserved_1  = 6,
+  reserved_2  = 7,
 };
 
 #endif /* NODE_STATE_H_ */

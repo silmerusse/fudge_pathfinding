@@ -3,23 +3,18 @@
 
 #include <string>
 #include <sstream>
+#include <memory>
 #include "grid_node.h"
-
-using namespace std;
-using Coord = pair<int,int>;
 
 // This is used to hold grid nodes for quick indexing.
 template<typename CostType>
 class GridNodeArray {
 public:
-  GridNodeArray(int w, int h):w_(w), h_(h) {
+  explicit GridNodeArray(int w, int h):w_(w), h_(h) {
     reset();
   }
 
-  ~GridNodeArray() {
-    if (array_ != nullptr)
-      delete array_;
-  }
+  virtual ~GridNodeArray() = default;
 
 public:
   int w_ = 0;
@@ -27,11 +22,7 @@ public:
 
 public:
   void reset() {
-    if (array_ != nullptr) {
-      delete array_;
-      array_ = nullptr;
-    }
-    array_ = new GridNode<CostType>[h_*w_];
+    array_.reset(new GridNode<CostType>[h_*w_]);
     for (int i=0; i < h_; i++) {
       for (int j=0; j < w_; j++) {
           node(Coord(j, i))->x(j);
@@ -41,7 +32,7 @@ public:
   }
 
   GridNode<CostType> *node(Coord coord) const{
-    return &array_[coord.second * w_ + coord.first];
+    return &array_.get()[coord.second * w_ + coord.first];
   }
 
   bool off(Coord coord) const {
@@ -52,11 +43,8 @@ public:
       return false;
   }
 
-
-
 private:
-  GridNode<CostType> *array_ {nullptr};
-
+  std::unique_ptr<GridNode<CostType>> array_ = nullptr;
 };
 
 

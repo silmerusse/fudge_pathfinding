@@ -2,10 +2,7 @@
 #define JUMP_POINT_MAP_H_
 
 #include <algorithm>
-
-#define LOG_LEVEL 2
 #include "log.h"
-
 #include "node_state.h"
 #include "grid_map.h"
 #include "search_stats.h"
@@ -24,17 +21,17 @@ class JumpPointMap : public GridMap<CostType> {
 public:
   JumpPointMap(int w, int h, vector<CostType> &matrix)
       : GridMap<CostType>(w, h, matrix) {};
-  virtual ~JumpPointMap() {};
+  virtual ~JumpPointMap() = default;
 
 public:
   // Override to return edges with destination nodes that are jump points.
-  const vector<Edge<NodeType, CostType>> edges(const NodeType &n) override{
+  const vector<Edge<NodeType, CostType>> edges(NodeType &n) override{
     vector <Edge<NodeType, CostType>> es;
 
     // Search and add jump points at all directions for start node.
     // For others, only search at necessary directions.
     if (this->node(n)->parent_->c_ == n) {
-      const vector<Coord> &&coords = this->coord_neighbors(n);
+      const vector<Coord> &&coords = this->coord_8_neighbors(n);
       for (auto c : coords) {
         push_jump_point(es, c.first, c.second, n);
       }
@@ -86,11 +83,6 @@ public:
       }
     }
     return es;
-  }
-
-public:
-  void initialize(const NodeType &start, const NodeType &goal) override {
-    goal_ = goal;
   }
 
 protected:
@@ -154,14 +146,14 @@ protected:
 
   // Helper to push a jump point found to the container.
   void push_jump_point(vector<Edge<NodeType, CostType>> &es, int x, int y,
-                                                          const NodeType &n) {
+                       const NodeType &n) {
     NodeType jp = find_jump_point(x, y, n);
     if (jp != INVALID_NODE)
-      es.push_back(Edge<NodeType, CostType>(n, jp,
-                                GridMap<CostType>::diagonal_distance(n, jp)));
+      es.push_back(Edge<NodeType, CostType>(
+          n, jp, GridMap<CostType>::diagonal_distance(n, jp)));
   }
 
-protected:
+public:
   NodeType goal_;
 
 protected:

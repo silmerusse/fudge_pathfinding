@@ -21,7 +21,7 @@ public:
 
 template<typename Q>
 static const string stringify_q(const Q &q) {
-  stringstream ss;
+  ostringstream ss;
   for (auto i = q.queue_.begin(); i != q.queue_.end(); i++) {
     ss << *i <<",";
   }

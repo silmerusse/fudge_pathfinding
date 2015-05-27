@@ -6,8 +6,6 @@
 #include <algorithm>
 #include "priority_queue.h"
 
-using namespace std;
-
 // This data structure consists of two parts. One is a heap called "hot".
 // The other is a list of buckets called "cold".
 // High priority elements will be put to hot and others will be put to cold.
@@ -32,34 +30,22 @@ public:
       hot_.insert(n);
     else {
       while (static_cast<int>(cold_.size()) < i - threshold_) {
-        vector<ElementType> v;
+        std::vector<ElementType> v;
         cold_.push_back(v);
       }
       cold_[i - threshold_ - 1].push_back(n);
     }
-    //count_++;
   }
 
   ElementType remove_front() override {
-    if (hot_.is_empty()) {
-      assert (!cold_.empty());
-
-      while (cold_[0].size() == 0) {
-        cold_.erase(cold_.begin());
-        threshold_++;
-      }
-
-      // get the first bucket from cold and heapify it as hot
-      std::move(cold_[0].begin(), cold_[0].end(),
-          std::back_inserter(hot_.queue_));
-      make_heap(hot_.queue_.begin(), hot_.queue_.end(),
-                PriorityHandler::less_priority);
-      cold_.erase(cold_.begin());
-
-      threshold_++;
-    }
+    keep_hot();
     count_--;
     return hot_.remove_front();
+  }
+
+  ElementType front() override {
+    keep_hot();
+    return hot_.front();
   }
 
   int find(const ElementType n) override {
@@ -98,9 +84,14 @@ public:
     count_ = 0;
   }
 
+  std::size_t size() const override {
+    return hot_.size() + cold_.size();
+  }
+
 public:
-  HeapType hot_;
-  vector<vector<ElementType>> cold_; // each level one element is a bucket
+  HeapType hot_;                                // Hot queue.
+  std::vector<std::vector<ElementType>> cold_; // Cold buckets.
+
   int threshold_ {-1}; // each hot element's priority < (threshold_ + 1)*kc_
   double kc_ = 1.4143; // size of each bucket
 
@@ -114,6 +105,26 @@ private:
       assert(0);
     }
     count_--;
+  }
+
+  void keep_hot() {
+    if (hot_.is_empty()) {
+      assert (!cold_.empty());
+
+      while (cold_[0].size() == 0) {
+        cold_.erase(cold_.begin());
+        threshold_++;
+      }
+
+      // get the first bucket from cold and heapify it as hot
+      std::move(cold_[0].begin(), cold_[0].end(),
+          std::back_inserter(hot_.queue_));
+      make_heap(hot_.queue_.begin(), hot_.queue_.end(),
+                PriorityHandler::less_priority);
+      cold_.erase(cold_.begin());
+
+      threshold_++;
+    }
   }
 
 private:

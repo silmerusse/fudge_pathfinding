@@ -22,9 +22,9 @@ public:
 
 
 template<typename Q>
-const string stringify_q (const Q &q) {
+const std::string stringify_q (const Q &q) {
 
-  stringstream ss;
+  std::ostringstream ss;
   for (auto n : q.hot_.queue_ ) {
      ss << n <<",";
   }

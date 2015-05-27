@@ -5,7 +5,6 @@
 #include <string>
 #include <utility>
 
-#define LOG_LEVEL 2
 #include "log.h"
 
 #include "search_stats.h"
@@ -60,8 +59,7 @@ public:
 
 public:
   // Override to return edges with destination nodes according to four moves.
-  const vector<Edge<NodeType, int>> edges (
-                                        const NodeType &n) override {
+  const vector<Edge<NodeType, int>> edges (NodeType &n) override {
     vector<Edge<NodeType, int>> es;
     int i = n.first.find(kHole);
     int x = i%w_;
@@ -80,10 +78,6 @@ public:
       push_edge(es, n.first, i, (y - 1)*w_ + x); // Move north
 
     return es;
-  }
-
-  // Not used.
-  void initialize (const NodeType &start, const NodeType &end) override {
   }
 
   int current_cost(const NodeType &k) const override {
@@ -166,7 +160,7 @@ public:
   }
 
 public:
-  const string to_string() const {
+  const std::string to_string() const {
     return stats_.to_string() + "\n";
   }
 
