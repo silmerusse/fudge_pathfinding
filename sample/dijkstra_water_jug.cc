@@ -15,7 +15,7 @@ int main (int argc, char *argv[]) {
   PREPARE_TIMER
   START_TIMER
   WaterJugMap map(std::vector<int>{21, 15, 8, 5});
-  vector<WaterJugNode> &&path = AStarSearch::search(
+  std::vector<WaterJugNode> &&path = AStarSearch::search(
       map,
       WaterJugNode(std::vector<int>{21, 0, 0, 0}),
       WaterJugNode(std::vector<int>{7, 7, 7, 0}),

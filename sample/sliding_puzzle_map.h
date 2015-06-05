@@ -13,8 +13,7 @@
 #include "hot_queue.h"
 #include "priority_queue_stl.h"
 
-using namespace std;
-using NodeType = pair<string, int>;
+using NodeType = std::pair<string, int>;
 
 // This implements a map for resolving sliding puzzles.
 // We use a string(vector of chars) to represent positions.

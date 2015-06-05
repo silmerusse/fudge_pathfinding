@@ -6,7 +6,7 @@
 
 // Find path from start position to target position using A*.
 int main (int argc, char *argv[]) {
-  vector<double> matrix = load_matrix<double>("../data/matrix_10x10_wall.txt");
+  std::vector<double> matrix = load_matrix<double>("../data/matrix_10x10_wall.txt");
 
   PREPARE_TIMER
   START_TIMER

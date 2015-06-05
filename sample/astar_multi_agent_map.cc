@@ -30,27 +30,20 @@ void print_result(const std::vector<const MultiAgentNode*> &path,
   std::cout << ss.str();
 }
 
-// 10 agents in 2 groups find paths with different speed in a 10x10 map with
+// 6 agents in 2 groups find paths with different speed in a 10x10 map with
 // obstacles. All agents except the first one of each group have predecessors.
 int main (int argc, char *argv[]) {
   std::vector<int> matrix = load_matrix<int>("../data/matrix_10x10_agents.txt");
-  //std::vector<int> matrix = load_matrix<int>("../data/matrix_10x10_plain.txt");
 
-  // Increase heuristic weight to accelerate searching.
-  // But the result may not be optimal.
-  MultiAgentMap map(10, 10, matrix, 1.25);
+  MultiAgentMap map(10, 10, matrix, 1);
 
   auto start = MultiAgentNode::create({}, {},
-      {Agent(0, Pos(0, 0), Pos(9, 9), 5),
-       Agent(1, Pos(0, 0), Pos(9, 9), 4, 0),
-       Agent(2, Pos(0, 0), Pos(9, 9), 3, 1),
-       Agent(3, Pos(0, 0), Pos(9, 9), 2, 2),
-       Agent(4, Pos(0, 0), Pos(9, 9), 1, 3),
-       Agent(5, Pos(9, 9), Pos(0, 0), 5),
-       Agent(6, Pos(9, 9), Pos(0, 0), 4, 5),
-       Agent(7, Pos(9, 9), Pos(0, 0), 3, 6),
-       Agent(8, Pos(9, 9), Pos(0, 0), 2, 7),
-       Agent(9, Pos(9, 9), Pos(0, 0), 1, 8),
+      {Agent(0, Pos(0, 0), Pos(9, 9), 3),
+       Agent(1, Pos(0, 0), Pos(9, 9), 2, 0),
+       Agent(2, Pos(0, 0), Pos(9, 9), 1, 1),
+       Agent(3, Pos(9, 9), Pos(0, 0), 3),
+       Agent(4, Pos(9, 9), Pos(0, 0), 2, 3),
+       Agent(5, Pos(9, 9), Pos(0, 0), 1, 4),
       });
   auto end = MultiAgentNode::create();
   std::cout << start->to_string() << std::endl;

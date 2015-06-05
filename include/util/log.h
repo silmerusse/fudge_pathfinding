@@ -1,7 +1,7 @@
 #ifndef LOG_H_
 #define LOG_H_
 
-#define LOG_LEVEL 2
+#define LOG_LEVEL 1
 
 #if LOG_LEVEL == 0
 #define DEBUG(...) do { \

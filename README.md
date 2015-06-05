@@ -1,5 +1,10 @@
-This is a C++ implementation of A* path finding algorithm. The implementation is designed to be generic enough (hopefully) to support different type of maps. The source code has already included samples using 8-way tiled map and position maps for N-puzzle game and water jug problem. User could derive from them or provide own map class for specific need. 
+This is a C++ implementation of A* path finding algorithm. The implementation is designed to be generic enough (hopefully) to support different type of maps. The source code has included samples of tiled map pathfinding with single and multiple agents, N-puzzle game, and water jug problem.  
 
-An implementation of Jump Point Search is also provided as an extension of the A* algorithm. Basically JPS just uses a different way to generate new "neighbors" to be put into the open node list.
+An implementation of JPS(Jump Point Search) for tiled map is provided as an extension to the A* algorithm. In fact, JPS just uses a different way to generate new "neighbors" to be put into the open node list.
 
-All source code are provided as headers. Besides them, there are a few samples and tests included. Simply run "make" in the corresponding directories to build them. Please note, tests require Google Test packages installed. 
+Run "cmake" to generate makefiles and "make" to build the source code. 
+
+A simple GUI app is also included under "gui" directory to demostrate agent pathfinding. To build the app, please make sure "SDL" and "JsonCpp" packages are installed.
+
+Tests require "GoogleTest" package.
+ 

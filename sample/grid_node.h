@@ -7,7 +7,7 @@
 #include "node_state.h"
 #include "map.h"
 
-using Coord=pair<int,int>;
+using Coord=std::pair<int,int>;
 
 // This represents a node in a tiled grid map that holds cost, state,
 // coordinate, and a pointer to its parent node, .

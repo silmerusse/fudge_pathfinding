@@ -6,7 +6,7 @@
 
 // Find path from start position to target position using Jump Point algorithm.
 int main (int argc, char *argv[]) {
-  vector<double> matrix = load_matrix<double>("../data/matrix_10x10_wall.txt");
+  std::vector<double> matrix = load_matrix<double>("../data/matrix_10x10_wall.txt");
 
   PREPARE_TIMER
   START_TIMER
@@ -14,7 +14,7 @@ int main (int argc, char *argv[]) {
   Coord start = Coord(7, 0);
   Coord goal = Coord(4, 1);
   map.goal_ = goal; // This is needed for checking Jump Point.
-  vector<Coord> &&path = AStarSearch::search(
+  std::vector<Coord> &&path = AStarSearch::search(
       map, start, goal,
       GridMap<double>::diagonal_distance);
   END_TIMER

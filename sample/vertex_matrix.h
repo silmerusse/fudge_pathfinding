@@ -5,13 +5,13 @@
 #include <string>
 #include <sstream>
 
-using Coord = pair<int,int>;
+using Coord = std::pair<int,int>;
 
 template<typename WeightType>
 class VertexMatrix {
 public:
-  VertexMatrix(int width, int height, const std::vector<WeightType> &matrix)
-       : width_(width), height_(height), matrix_(matrix) {}
+  VertexMatrix(int width, int height, const std::vector<WeightType> &matrix):
+       width_(width), height_(height), matrix_(matrix) {}
   virtual ~VertexMatrix() {}
 
 public:

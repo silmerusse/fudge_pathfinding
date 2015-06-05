@@ -7,7 +7,7 @@
 #include "grid_map.h"
 
 // This is an implementation of RRA* (Reverse Resumable A*) algorithm.
-// The instance keeps a series of maps with separated open list and differen
+// The instance keeps a series of maps with separated open list and different
 // start point. Each search will return the actual cost(g) from the start
 // position to end position. After the search, the map and open list is not
 // destroyed so that the next search could reuse the data.
@@ -31,7 +31,8 @@ public:
       return g;
     else {
       DEBUG("RRA: Start search.");
-      std::vector<Coord> &&path = AStarSearch::search(*(maps_.at(start)), start, end,
+      std::vector<Coord> &&path = AStarSearch::search(*(maps_.at(start)), 
+          start, end,
           heuristic);
       DEBUG("RRA: End search.");
       return maps_.at(start)->node(path.front())->g_;
@@ -43,7 +44,6 @@ private:
   std::map<Coord, std::unique_ptr<GridMap<CostType>>> maps_;
   int w_;
   int h_;
-
 };
 
 
