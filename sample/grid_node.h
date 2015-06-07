@@ -41,11 +41,11 @@ public:
   }
 
 public:
-  constexpr int x() {
+  constexpr int x() const {
     return c_.first;
   }
 
-  constexpr int y() {
+  constexpr int y() const {
     return c_.second;
   }
 

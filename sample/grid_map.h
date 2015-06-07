@@ -2,6 +2,7 @@
 #define GRID_MAP_H_
 
 #include <algorithm>
+#include <math.h>
 #include "log.h"
 #include "node_state.h"
 #include "map.h"
