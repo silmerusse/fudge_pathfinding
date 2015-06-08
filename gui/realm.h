@@ -4,11 +4,16 @@
 #include <memory>
 #include "log.h"
 #include "object_manager.h"
+#include "texture_manager.h"
 #include "event_queue.h"
 
 class Realm {
 public:
-  explicit Realm(const unsigned int w, const unsigned int h): w_(w), h_(h) {};
+  explicit Realm(const unsigned int w, const unsigned int h,
+                 std::unique_ptr<TextureManager> &texture_manager):
+                 w_(w), h_(h), texture_manager_(std::move(texture_manager)) {
+    object_manager_.reset(new ObjectManager());
+  };
   virtual ~Realm() = default;
 
   void select(Object *selectee) {
@@ -41,6 +46,7 @@ public:
   unsigned int w_ = 0;
   unsigned int h_ = 0;
   std::unique_ptr<ObjectManager> object_manager_ = nullptr;
+  std::unique_ptr<TextureManager> texture_manager_ = nullptr;
   Object *selectee_ = nullptr;
   MultiEventQueue event_queue_;
 };

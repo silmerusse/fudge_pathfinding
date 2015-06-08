@@ -27,7 +27,7 @@ std::vector<const MultiAgentNode*> strip_path(
 void print_result(const std::vector<const MultiAgentNode*> &path,
                   const MultiAgentMap &map){
   std::cout << "--------------------\n";
-  ostringstream ss;
+  std::ostringstream ss;
   for (auto i = path.begin(); i != path.end(); ++i)
     ss << (*i)->annotation_  << " --- " << (*i)->cost_ << std::endl;
   ss << map.stats_.to_string() << std::endl;;
@@ -112,7 +112,7 @@ TEST(MultiAgentMap, search_2x1_2_agents) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -147,7 +147,7 @@ TEST(MultiAgentMap, search_2x1_2_agents_chain) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -179,7 +179,7 @@ TEST(MultiAgentMap, search_2x2_2_agents) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -213,7 +213,7 @@ TEST(MultiAgentMap, search_2x2_3_agents) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -248,7 +248,7 @@ TEST(MultiAgentMap, search_10x10_1_agent) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -297,7 +297,7 @@ TEST(MultiAgentMap, search_10x10_wall_1_agent) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -344,7 +344,7 @@ TEST(MultiAgentMap, search_10x10_wall_2_agents) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -392,7 +392,7 @@ TEST(MultiAgentMap, search_2x2_2_agents_different_speed) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -425,7 +425,7 @@ TEST(MultiAgentMap, search_2x2_2_agents_different_speed_slower) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -460,7 +460,7 @@ TEST(MultiAgentMap, search_10x10_2_agents_different_speed) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -530,7 +530,7 @@ TEST(MultiAgentMap, search_10x10_3_agents) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -593,7 +593,7 @@ TEST(MultiAgentMap, search_10x10_10_agents) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 

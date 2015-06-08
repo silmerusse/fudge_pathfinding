@@ -17,11 +17,11 @@ void Camera::shoot() {
             if (dynamic_cast<Renderable*>(component.get())) {
               Renderable *r = dynamic_cast<Renderable*>(component.get());
               auto rect = r->get_rect();
-              if (SDL_HasIntersection(&rect, &rect_)) {
+              if (r->visible_ && SDL_HasIntersection(&rect, &rect_)) {
                 renderables_.push_back(r);
               }
             }
           }
-        });
+    });
   }
 }

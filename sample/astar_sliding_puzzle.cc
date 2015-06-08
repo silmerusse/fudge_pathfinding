@@ -16,16 +16,17 @@ int main (int argc, char *argv[]) {
   PREPARE_TIMER
   START_TIMER
   SlidingPuzzleMap map(3);
-  std::vector<pair<string, int>> &&path = AStarSearch::search(
-      map, make_pair(string("876543210"), 0), make_pair(string("123456780"), 0),
+
+  std::vector<SlidingPosition> &&path = AStarSearch::search(
+      map, SlidingPosition("876543210"), SlidingPosition("123456780"),
       std::bind(&SlidingPuzzleMap::manhattan_distance, map,
-          placeholders::_1, placeholders::_2));
+          std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
   for (auto i = path.rbegin(); i != path.rend() ; ++i)
-    std::cout << i->first << " f:" << i->second << std::endl;
-  std::cout << map.to_string() << std::endl;
+    std::cout << i->to_string() << " --- " << i->cost_ << std::endl;
+  std::cout << map.stats_.to_string() << std::endl;
 
   return 0;
 }

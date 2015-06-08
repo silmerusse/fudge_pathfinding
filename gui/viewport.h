@@ -37,8 +37,9 @@ public:
   std::unique_ptr<Camera> camera_ = nullptr;
 
 private:
-  void handle_key_down(SDL_Keycode sym) override;
-  void handle_mouse_button_down(Uint8 button, const SDL_Point& point) override;
+  void handle_key_down(const SDL_KeyboardEvent &e) override;
+  void handle_mouse_button_down(const SDL_MouseButtonEvent &e) override;
+  void handle_mouse_motion (const SDL_MouseMotionEvent &e) override;
 };
 
 #endif /* VIEWPORT_H_ */

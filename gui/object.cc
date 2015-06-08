@@ -16,23 +16,22 @@ void Object::handle_events (Realm *realm) {
     auto event = event_queue_->pop_front();
 
     if (event->type_ == "mouse_button_down") {
-      int x = event->params_[0].asInt();
-      int y = event->params_[1].asInt();
-      on_mouse_button_down(realm, x, y);
+      on_mouse_button_down(
+          realm, event->params_[0].asUInt(), event->params_[1].asInt(),
+          event->params_[2].asInt());
+    } else if (event->type_ == "mouse_motion" ) {
+      on_mouse_motion(
+          realm, event->params_[0].asInt(), event->params_[1].asInt(),
+          event->params_[2].asInt(), event->params_[3].asInt());
+    } else if (event->type_ == "key_down") {
+      on_key_down(realm, event->params_[0].asInt());
     }
   }
 }
 
-void Object::on_mouse_button_down(Realm *realm, int x, int y) {
-  auto pos = get_absolute_position();
-  if (abs(static_cast<int>(x - pos.x)) <= 16 &&
-      abs(static_cast<int>(y - pos.y)) <= 16) {
-    realm->select(this);
-    DEBUG("Unit selected: %s", to_string().c_str());
-  } else {
-    if (realm->selectee_ == this) {
-      realm->unselect();
-      DEBUG("Unit unselected: %s", to_string().c_str());
-    }
-  }
-}
+void Object::on_mouse_button_down(Realm *realm, unsigned int button,
+                                  int x, int y) {}
+
+void Object::on_mouse_motion(Realm *realm, int x, int y, int relx, int rely) {}
+
+void Object::on_key_down(Realm *realm, int sym) {}

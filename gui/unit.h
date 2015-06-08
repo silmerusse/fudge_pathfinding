@@ -26,7 +26,8 @@ public:
 
   virtual void tick(Realm *realm) override;
 
-  virtual void on_mouse_button_down(Realm *realm, int x, int y) override;
+  virtual void on_mouse_button_down(Realm *realm, unsigned int button,
+                                    int x, int y) override;
 
   // Get the current grid position.
   Pos get_grid_pos(Game *g) const;

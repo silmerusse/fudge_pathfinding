@@ -23,7 +23,7 @@ std::vector<const MultiAgentNode*> strip_path(
 void print_result(const std::vector<const MultiAgentNode*> &path,
                   const MultiAgentMap &map){
   std::cout << "--------------------\n";
-  ostringstream ss;
+  std::ostringstream ss;
   for (auto i = path.begin(); i != path.end(); ++i)
     ss << (*i)->annotation_  << " --- " << (*i)->cost_ << std::endl;
   ss << map.stats_.to_string() << std::endl;;
@@ -53,7 +53,7 @@ int main (int argc, char *argv[]) {
   std::vector<NodeType> &&path0 = AStarSearch::search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    placeholders::_1, placeholders::_2));
+                    std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 

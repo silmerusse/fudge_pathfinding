@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <sstream>
 #include "loadable.h"
 #include "transform.h"
 #include "event.h"
@@ -75,10 +76,18 @@ public:
 
   virtual void handle_events(Realm *realm);
 
-  virtual void on_mouse_button_down(Realm *realm, int x, int y);
+  virtual void on_mouse_button_down(Realm *realm, unsigned int button,
+                                    int x, int y);
+
+  virtual void on_mouse_motion(Realm *realm, int x, int y, int relx, int rely);
+
+  virtual void on_key_down(Realm *realm, int sym);
 
   virtual const std::string to_string() const {
-    return std::string("");
+    std::ostringstream ss;
+    ss << "Transform: (" << transform_->to_string() << ")";
+    return ss.str();
+
   }
 
 public:

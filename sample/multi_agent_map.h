@@ -241,7 +241,7 @@ class MultiAgentMap : public Map<std::shared_ptr<MultiAgentNode>, int> {
   using NodeType = std::shared_ptr<MultiAgentNode>;
 
 public:
-  MultiAgentMap(int w, int h, const vector<int> &matrix,
+  MultiAgentMap(int w, int h, const std::vector<int> &matrix,
       double weight = 1.0):
     open_list_(), grid_map_(w, h, matrix), rra_(matrix, w, h),
     weight_(weight) {};
@@ -382,7 +382,7 @@ public:
     return map_.find(n)->second->state_ == NodeState::open;
   }
 
-  bool open_node_available() override {
+  bool open_node_available() const override {
     return !(open_list_.is_empty());
   }
 

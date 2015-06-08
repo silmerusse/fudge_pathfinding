@@ -11,7 +11,7 @@ int main (int argc, char *argv[]) {
   PREPARE_TIMER
   START_TIMER
   GridMap<double> map(10, 10, matrix);
-  vector<Coord> &&path = AStarSearch::search(
+  std::vector<Coord> &&path = AStarSearch::search(
       map, Coord(7, 0), Coord(4, 1),
       GridMap<double>::diagonal_distance);
   END_TIMER

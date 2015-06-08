@@ -4,8 +4,7 @@
 #include <string>
 #include <sstream>
 
-class SearchStats
-{
+class SearchStats {
 public:
   int nodes_opened = 0;
   int nodes_closed = 0;
@@ -29,4 +28,5 @@ public:
     return ss.str();
   }
 };
+
 #endif /* SEARCH_STATS_H_ */

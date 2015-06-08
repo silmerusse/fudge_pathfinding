@@ -6,8 +6,8 @@
 #include "time_util.h"
 
 // Helper to print and return result.
-const string print_result(const vector<Coord> &path,
-                          const JumpPointMap<double> &map) {
+const std::string print_result(const std::vector<Coord> &path,
+                               const JumpPointMap<double> &map) {
   std::cout << "--------------------\n";
   std::ostringstream ss;
   for (auto i = path.rbegin(); i != path.rend(); ++i)
@@ -19,23 +19,22 @@ const string print_result(const vector<Coord> &path,
 
 
 TEST(JumpPointMap, search_10x10) {
-  vector<double> matrix = load_matrix<double>(
+  std::vector<double> matrix = load_matrix<double>(
       "../data/matrix_10x10_plain.txt");
 
   PREPARE_TIMER
   START_TIMER
     JumpPointMap<double> map(10, 10, matrix);
     map.goal_ = Coord(9, 9);
-    vector<Coord> &&path = AStarSearch::search(map,
-                                          Coord(0, 0), Coord(9, 9),
-                                          GridMap<double>::diagonal_distance);
+    std::vector<Coord> &&path = AStarSearch::search(
+        map, Coord(0, 0), Coord(9, 9), GridMap<double>::diagonal_distance);
 
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  string result = print_result(path, map);
+  std::string result = print_result(path, map);
 
-  string expected = string("") +
+  std::string expected = std::string("") +
       "(9,9)<-(0,0) g:12.7287 f:12.7287" + "\n" +
       "  nodes opened:2"                      + "\n" +
       "  nodes closed:2"                      + "\n" +
@@ -68,10 +67,9 @@ TEST(JumpPointMap, search_10x10) {
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  string result2 = print_result(path, map2);
+  std::string result2 = print_result(path, map2);
 
-
-  string expected2 = string("") +
+  std::string expected2 = std::string("") +
       "(0,9)<-(9,0) g:12.7287 f:12.7287" + "\n" +
       "  nodes opened:2"                 + "\n" +
       "  nodes closed:2"                 + "\n" +
@@ -90,28 +88,26 @@ TEST(JumpPointMap, search_10x10) {
       "G         " + "\n" +
       "\n";
 
-
   ASSERT_EQ(expected2, result2);
-
 }
 
 TEST(JumpPointMap, search_10x10_wall) {
-  vector<double> matrix2 = load_matrix<double>(
+  std::vector<double> matrix2 = load_matrix<double>(
       "../data/matrix_10x10_wall.txt");
 
   PREPARE_TIMER
   START_TIMER
     JumpPointMap<double> map(10, 10, matrix2);
   map.goal_ = Coord(4, 1);
-    vector<Coord> &&path = AStarSearch::search(
+  std::vector<Coord> &&path = AStarSearch::search(
         map, Coord(7, 0), Coord(4, 1),
         GridMap<double>::diagonal_distance);
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  string result = print_result(path, map);
+  std::string result = print_result(path, map);
 
-  string expected = string("") +
+  std::string expected = std::string("") +
       "(8,1)<-(7,0) g:1.4143 f:5.4143" + "\n" +
       "(8,7)<-(8,1) g:7.4143 f:15.0715" + "\n" +
       "(7,8)<-(8,7) g:8.8286 f:17.0715" + "\n" +
@@ -139,24 +135,23 @@ TEST(JumpPointMap, search_10x10_wall) {
       "\n";
 
   ASSERT_EQ(expected, result);
-
 }
 
 TEST(JumpPointMap, search_100x100) {
-  vector<double> matrix2 = load_matrix<double>(
+  std::vector<double> matrix2 = load_matrix<double>(
       "../data/matrix_100x100.txt");
 
   PREPARE_TIMER
   START_TIMER
     JumpPointMap<double> map(100, 100, matrix2);
     map.goal_ = Coord(99, 99);
-    vector<Coord> &&path = AStarSearch::search(
+    std::vector<Coord> &&path = AStarSearch::search(
         map, Coord(0, 0), Coord(99, 99),
         GridMap<double>::diagonal_distance);
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  string result = print_result(path, map);
+  std::string result = print_result(path, map);
 
   ASSERT_EQ(80, path.size());
 }

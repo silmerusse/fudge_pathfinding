@@ -12,21 +12,20 @@
 template <typename ElementType, typename PriorityType, typename PriorityHandler>
 class BinaryHeap : public PriorityQueue<ElementType, PriorityType> {
 public:
-  BinaryHeap() {}
-  virtual ~BinaryHeap() {};
+  BinaryHeap() = default;
+  virtual ~BinaryHeap() = default;
 
 public:
   std::vector<ElementType> queue_;
 
 public:
-
-  void insert(const ElementType e) {
+  virtual void insert(const ElementType &e) override {
     queue_.push_back(e);
     int i = queue_.size() - 1;
     up(i);
   }
 
-  ElementType remove_front() {
+  virtual ElementType remove_front() override {
     ElementType front = queue_[0];
     queue_[0] =  queue_.back();
     queue_.pop_back();
@@ -35,13 +34,13 @@ public:
     return front;
   }
 
-  ElementType front() {
+  virtual ElementType front() override {
     ElementType front = queue_[0];
     queue_[0] =  queue_.back();
     return front;
   }
 
-  int find(const ElementType e) {
+  virtual int find(const ElementType &e) override {
     auto r = std::find(queue_.begin(), queue_.end(), e);
     if (r == queue_.end())
       return -1;
@@ -49,20 +48,26 @@ public:
       return (r - queue_.begin());
   }
 
-  void increase_priority(ElementType e, PriorityType p) {
+  virtual void increase_priority(const ElementType &e,
+                                 PriorityType p) override {
     int i = find(e);
     PriorityHandler::set_priority(queue_[i], p);
     up(i);
   }
 
-  bool is_empty() {
+  virtual bool is_empty() const override {
     return (queue_.size() == 0);
   }
 
-  void clear() {
+  virtual void clear() override {
     queue_.clear();
   }
 
+  virtual std::size_t size() const override {
+    return queue_.size();
+  }
+
+protected:
   // Percolate up an element at the index specified.
   void up(int i) {
     ElementType value = queue_[i];
@@ -99,11 +104,6 @@ public:
     queue_[hole] = value;
     up(hole);
   }
-
-  std::size_t size() const override {
-    return queue_.size();
-  }
-
 };
 
 #endif /* BINARY_HEAP_H_ */

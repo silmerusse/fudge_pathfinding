@@ -24,19 +24,21 @@ void Viewport::render(SDL_Renderer *renderer) const {
 void Viewport::handle_event(const SDL_Event &e) {
   switch (e.type) {
   case SDL_KEYDOWN:
-    handle_key_down(e.key.keysym.sym);
+    handle_key_down(e.key);
     break;
   case SDL_MOUSEBUTTONDOWN:
-    handle_mouse_button_down(e.button.button, {e.button.x, e.button.y});
+    handle_mouse_button_down(e.button);
     break;
+  case SDL_MOUSEMOTION:
+    handle_mouse_motion(e.motion);
   }
 }
 
-void Viewport::handle_key_down(SDL_Keycode sym) {
+void Viewport::handle_key_down(const SDL_KeyboardEvent &e) {
   camera_->realm_->event_queue_.push_back(
-      std::move(Event::create("key_down", sym)));
+      std::move(Event::create("key_down", e.keysym.sym)));
 
-  switch (sym) {
+  switch (e.keysym.sym) {
   case SDLK_LEFT:
     camera_->move_by(-1, 0);
     break;
@@ -52,9 +54,18 @@ void Viewport::handle_key_down(SDL_Keycode sym) {
   }
 }
 
-void Viewport::handle_mouse_button_down(Uint8 button, const SDL_Point& point) {
+void Viewport::handle_mouse_button_down(const SDL_MouseButtonEvent &e) {
   camera_->realm_->event_queue_.push_back(
       std::move(Event::create("mouse_button_down",
-                              point.x + camera_->rect_.x,
-                              point.y + camera_->rect_.y)));
+                              e.button,
+                              e.x + camera_->rect_.x,
+                              e.y + camera_->rect_.y)));
+}
+
+void Viewport::handle_mouse_motion (const SDL_MouseMotionEvent &e) {
+  camera_->realm_->event_queue_.push_back(
+      std::move(Event::create("mouse_motion",
+                                    e.x + camera_->rect_.x,
+                                    e.y + camera_->rect_.y,
+                                    e.xrel, e.yrel)));
 }

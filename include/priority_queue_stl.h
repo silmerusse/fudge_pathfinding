@@ -17,24 +17,28 @@
 template <typename ElementType, typename PriorityType, typename PriorityHandler>
 class PriorityQueueSTL : public PriorityQueue<ElementType, PriorityType> {
 public:
-  void insert(ElementType e) override {
+  PriorityQueueSTL() = default;
+  virtual ~PriorityQueueSTL() = default;
+
+public:
+  virtual void insert(const ElementType &e) override {
     queue_.push_back(e);
     push_heap(queue_.begin(), queue_.end(), PriorityHandler::less_priority);
   }
 
-  ElementType remove_front() override {
+  virtual ElementType remove_front() override {
     ElementType e = queue_.front();
     pop_heap(queue_.begin(), queue_.end(), PriorityHandler::less_priority);
     queue_.pop_back();
     return e;
   }
 
-  ElementType front() override {
+  virtual ElementType front() override {
     ElementType e = queue_.front();
     return e;
   }
 
-  int find(const ElementType e) override {
+  virtual int find(const ElementType &e) override {
     typename std::vector<ElementType>::iterator i =
         std::find(queue_.begin(), queue_.end(), e);
     if (i == queue_.end())
@@ -48,7 +52,8 @@ public:
   // complexity is higher and does not respect the previous order (given two
   // elements with same priority):
   //   make_heap(queue_.begin(), queue_.begin() + i + 1, SP::less_priority);
-  void increase_priority(ElementType e, PriorityType p) override {
+  virtual void increase_priority(const ElementType &e,
+                                 PriorityType p) override {
     int i = find(e);
     PriorityHandler::set_priority(queue_[i], p);
 
@@ -57,15 +62,15 @@ public:
             queue_, i, PriorityHandler::less_priority);
   }
 
-  bool is_empty() override {
+  virtual bool is_empty() const override {
     return queue_.empty();
   }
 
-  void clear() override {
+  virtual void clear() override {
     queue_.clear();
   }
 
-  std::size_t size() const override {
+  virtual std::size_t size() const override {
     return queue_.size();
   }
 

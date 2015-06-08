@@ -71,7 +71,7 @@ public:
   }
 
   const std::string to_string() const {
-    ostringstream ss;
+    std::ostringstream ss;
     ss << "(" << x() << "," << y() << ")"
        << "<-(" << (parent_ != nullptr ? parent_->x() : -1)
        << "," << (parent_ != nullptr ? parent_->y() : -1) << ")"

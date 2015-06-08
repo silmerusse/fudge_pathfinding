@@ -3,6 +3,8 @@
 
 #include "object.h"
 
+class Realm;
+
 class Tile: public Object {
 public:
   Tile() = default;
@@ -13,7 +15,6 @@ public:
     return std::move(std::unique_ptr<Tile>(new Tile()));
   }
 
-  void tick();
   virtual void load(const Json::Value& v) override {};
 
 public:

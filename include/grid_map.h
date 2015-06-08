@@ -19,7 +19,7 @@ template <typename CostType = double>
 class GridMap : public Map<Coord, CostType> {
 
 public:
-  GridMap(int w, int h, const vector<CostType> &matrix,
+  GridMap(int w, int h, const std::vector<CostType> &matrix,
           bool enable_diagonal = true):
     vertex_matrix_(w, h, matrix), node_array_(w, h),
     enable_diagonal_(enable_diagonal) {};
@@ -39,8 +39,8 @@ public:
   static CostType diagonal_distance (const Coord &n0, const Coord &n1) {
     int dx = abs(x(n1) - x(n0));
     int dy = abs(y(n1) - y(n0));
-    int dmin = min(dx, dy);
-    int dmax = max(dx, dy);
+    int dmin = std::min(dx, dy);
+    int dmax = std::max(dx, dy);
     return static_cast<CostType>((dmin * kDiagonalEdgeWeight) +
                                  (dmax - dmin) * kStraightEdgeWeight);
   }
@@ -56,9 +56,9 @@ public:
     return node(n)->g_;
   }
 
-  virtual const vector<Edge<Coord, CostType>> edges(Coord &n) override {
-    vector <Edge<Coord, CostType>> es;
-    vector<Coord> coords;
+  virtual const std::vector<Edge<Coord, CostType>> edges(Coord &n) override {
+    std::vector <Edge<Coord, CostType>> es;
+    std::vector<Coord> coords;
 
     if (enable_diagonal_)
       coords = std::move(coord_8_neighbors(n));
@@ -78,7 +78,7 @@ public:
     return n0 == n1;
   }
 
-  virtual bool open_node_available() override {
+  virtual bool open_node_available() const override {
     return !open_list_.is_empty();
   }
 
@@ -92,22 +92,24 @@ public:
 
   virtual void open_node(Coord &n, CostType g, CostType h,
                          const Coord &p) override {
-    node(n)->parent_ = node(p);
-    node(n)->g_ = g;
-    node(n)->f_ = g + h;
-    open_list_.insert(node(n));
-    node(n)->state_ = NodeState::open;
+    auto nn = node(n);
+    nn->parent_ = node(p);
+    nn->g_ = g;
+    nn->f_ = g + h;
+    open_list_.insert(nn);
+    nn->state_ = NodeState::open;
     stats_.nodes_opened++;
     DEBUG("node inserted: %s", node(n)->to_string().c_str());
   }
 
   virtual void reopen_node(Coord &n, CostType g, CostType h,
                            const Coord &p) override {
-    node(n)->parent_ = node(p);
-    node(n)->g_ = g;
-    node(n)->f_ = g + h;
-    open_list_.insert(node(n));
-    node(n)->state_ = NodeState::open;
+    auto nn = node(n);
+    nn->parent_ = node(p);
+    nn->g_ = g;
+    nn->f_ = g + h;
+    open_list_.insert(nn);
+    nn->state_ = NodeState::open;
     stats_.nodes_reopened++;
     DEBUG("node reopened: %s", node(n)->to_string().c_str());
   }
@@ -122,15 +124,16 @@ public:
 
   virtual void increase_node_priority(Coord &n, CostType g, CostType h,
                                       const Coord &p) override {
-    node(n)->parent_ = node(p);
-    node(n)->g_ = g;
-    open_list_.increase_priority(node(n), g + h);
+    auto nn = node(n);
+    nn->parent_ = node(p);
+    nn->g_ = g;
+    open_list_.increase_priority(nn, g + h);
     stats_.nodes_priority_increased++;
-    DEBUG("node priority increased: %s", node(n)->to_string().c_str());
+    DEBUG("node priority increased: %s", nn->to_string().c_str());
   }
 
-  virtual vector<Coord> get_path(const Coord &n) override {
-    vector<Coord> path;
+  virtual std::vector<Coord> get_path(const Coord &n) override {
+    std::vector<Coord> path;
     Coord p = n;
     while (node(p)->parent_->c_ != p){
       path.push_back(p);
@@ -148,12 +151,12 @@ public:
     return node_array_.node(n);
   }
 
-  const string to_string() const {
+  const std::string to_string() const {
     static constexpr char syms[] = {
         ' ', 'o', '-', '@','S','G'
     };
 
-    ostringstream ss;
+    std::ostringstream ss;
     ss << stats_.to_string() << std::endl;
 
     for (int i=0; i < node_array_.h_; i++) {
@@ -191,7 +194,7 @@ protected:
   }
 
 protected:
-  static const vector<Coord> coord_4_neighbors(const Coord c) {
+  static const std::vector<Coord> coord_4_neighbors(const Coord c) {
     static constexpr int x_offsets_[9] {
             0,
         -1,    1,
@@ -204,14 +207,14 @@ protected:
             1,
     };
 
-    vector<Coord> cs;
+    std::vector<Coord> cs;
     for (int i=0; i < 4; i++) {
       cs.push_back(Coord(c.first + x_offsets_[i], c.second + y_offsets_[i]));
     }
     return cs;
   }
 
-  static const vector<Coord> coord_8_neighbors(const Coord c) {
+  static const std::vector<Coord> coord_8_neighbors(const Coord c) {
     static constexpr int x_offsets_[9] {
         -1, 0, 1,
         -1,    1,
@@ -224,7 +227,7 @@ protected:
          1, 1, 1,
     };
 
-    vector<Coord> cs;
+    std::vector<Coord> cs;
     for (int i=0; i < 8; i++) {
       cs.push_back(Coord(c.first + x_offsets_[i], c.second + y_offsets_[i]));
     }

@@ -24,8 +24,9 @@ public:
   int z_order_ = 0;
 
 protected:
-  virtual void handle_mouse_button_down(Uint8 button, const SDL_Point& point) {}
-  virtual void handle_key_down(SDL_Keycode sym) {}
+  virtual void handle_key_down(const SDL_KeyboardEvent &e) {}
+  virtual void handle_mouse_button_down(const SDL_MouseButtonEvent &e) {}
+  virtual void handle_mouse_motion(const SDL_MouseMotionEvent &e) {}
 };
 
 #endif /* PANEL_H_ */

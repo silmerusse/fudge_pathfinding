@@ -2,7 +2,6 @@
 #include "priority_queue_stl.h"
 #include "grid_node.h"
 
-
 template<typename T>
 class ScalarPriority {
 public:
@@ -20,7 +19,7 @@ public:
 };
 
 template<typename Q>
-static const string stringify_q(const Q &q) {
+static const std::string stringify_q(const Q &q) {
   std::ostringstream ss;
   for (auto n : q.queue_ ) {
     ss << n <<",";
@@ -34,11 +33,13 @@ const char *stringify(const PriorityQueueSTL<int, int,
                                       ScalarPriority<int>>>(q).c_str();
 }
 
-const char *stringify(const PriorityQueueSTL<GridNode<int>*, int, GridNode<int>> &q) {
+const char *stringify(
+    const PriorityQueueSTL<GridNode<int>*, int, GridNode<int>> &q) {
   return stringify_q<PriorityQueueSTL<GridNode<int>*, int, GridNode<int>>>(q).c_str();
 }
 
-const char *stringify(const PriorityQueueSTL<GridNode<double>*, double, GridNode<double>> &q) {
+const char *stringify(
+    const PriorityQueueSTL<GridNode<double>*, double, GridNode<double>> &q) {
   return stringify_q<PriorityQueueSTL<GridNode<double>*, double, GridNode<double>>>(q).c_str();
 }
 
@@ -123,7 +124,7 @@ TEST(PriorityQueueSTL, insert_remove_increase_int) {
 
 
 TEST(PriorityQueueSTL, increase_priority_node_int) {
-  using C = pair<int,int>;
+  using C = std::pair<int,int>;
   using CostType = int;
 
   PriorityQueueSTL<GridNode<CostType>*, CostType, GridNode<CostType>> q;
@@ -197,7 +198,7 @@ TEST(PriorityQueueSTL, increase_priority_node_int) {
 }
 
 TEST(PriorityQueueSTL, increase_priority_node_double) {
-  using C = pair<int,int>;
+  using C = std::pair<int,int>;
   using CostType = double;
 
   PriorityQueueSTL<GridNode<CostType>*, CostType, GridNode<CostType>> q;

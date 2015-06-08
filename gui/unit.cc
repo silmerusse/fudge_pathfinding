@@ -25,27 +25,30 @@ void Unit::tick(Realm *realm) {
   }
 }
 
-void Unit::on_mouse_button_down(Realm *realm, int x, int y) {
+void Unit::on_mouse_button_down(Realm *realm, unsigned int button,
+                                int x, int y) {
   Game *g = static_cast<Game*>(realm);
 
-  // Set selection status.
-  auto position = get_absolute_position();
-  if (abs(static_cast<int>(x - position.x)) <= g->grid_width_ / 2 &&
-      abs(static_cast<int>(y - position.y)) <= g->grid_height_ / 2) {
-    realm->select(this);
-    INFO("Unit selected: %s", to_string().c_str());
-  }
-
-  // Perform path searching when this is selected and a new grid position is
-  // specified.
-  Pos pos (x / g->grid_width_, y / g->grid_height_);
-  if (selected_ && get_grid_pos(g) != pos) {
-    GridMap<double> map(g->cols_, g->rows_, g->matrix_);
-    Pos start = get_grid_pos(g);
-    target_ = pos;
-    path_ = AStarSearch::search(map, start.to_pair(), target_.to_pair(),
-                                GridMap<double>::diagonal_distance);
-    INFO("Path re-calculated.");
+  if (button == SDL_BUTTON_LEFT) {
+    // Set selection status.
+    auto position = get_absolute_position();
+    if (abs(static_cast<int>(x - position.x)) <= g->grid_width_ / 2 &&
+        abs(static_cast<int>(y - position.y)) <= g->grid_height_ / 2) {
+      realm->select(this);
+      INFO("Unit selected: %s", to_string().c_str());
+    }
+  } else if (button == SDL_BUTTON_RIGHT) {
+    // Perform path searching when this is selected and a new grid position is
+    // specified.
+    Pos pos (x / g->grid_width_, y / g->grid_height_);
+    if (selected_ && get_grid_pos(g) != pos) {
+      GridMap<double> map(g->cols_, g->rows_, g->matrix_);
+      Pos start = get_grid_pos(g);
+      target_ = pos;
+      path_ = AStarSearch::search(map, start.to_pair(), target_.to_pair(),
+                                  GridMap<double>::diagonal_distance);
+      INFO("Path re-calculated.");
+    }
   }
 }
 

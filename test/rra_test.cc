@@ -5,7 +5,6 @@
 #include "load_matrix.h"
 #include "rra.h"
 
-
 TEST(RRA, search) {
   std::vector<int> matrix = load_matrix<int>("../data/matrix_10x10_plain.txt");
 
@@ -21,5 +20,4 @@ TEST(RRA, search) {
   int c = rra.search(Coord(0, 0), Coord(2, 2),
       GridMap<int>::manhattan_distance);
   ASSERT_EQ(4, c);
-
 }

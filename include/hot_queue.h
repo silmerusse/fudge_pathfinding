@@ -16,11 +16,12 @@ template <typename ElementType, typename PriorityType, typename PriorityHandler,
 class HotQueue
     : public PriorityQueue<ElementType, PriorityType>{
 public:
-  HotQueue() {};
+  HotQueue() = default;
   HotQueue(PriorityType kc) : kc_(kc) {};
+  virtual ~HotQueue() = default;
 
 public:
-  void insert(const ElementType n) override {
+  virtual void insert(const ElementType &n) override {
     count_++;
     int i = PriorityHandler::get_priority(n) / kc_;
     if (threshold_ < 0)
@@ -37,18 +38,18 @@ public:
     }
   }
 
-  ElementType remove_front() override {
+  virtual ElementType remove_front() override {
     keep_hot();
     count_--;
     return hot_.remove_front();
   }
 
-  ElementType front() override {
+  virtual ElementType front() override {
     keep_hot();
     return hot_.front();
   }
 
-  int find(const ElementType n) override {
+  virtual int find(const ElementType &n) override {
     int i = PriorityHandler::get_priority(n) / kc_;
     if (i <= threshold_) {
       return hot_.find(n);
@@ -62,43 +63,46 @@ public:
     }
   }
 
-  void increase_priority(ElementType n, PriorityType p) override {
+  virtual void increase_priority(const ElementType &n,
+                                 PriorityType p) override {
     int i = PriorityHandler::get_priority(n) / kc_;
     if (i <= threshold_) {
       hot_.increase_priority(n, p);
     } else {
       erase_from_cold(n);
-      PriorityHandler::set_priority(n, p);
-      insert(n);
+      ElementType n1(n);
+      PriorityHandler::set_priority(n1, p);
+      insert(n1);
     }
   }
 
-  bool is_empty() override {
+  virtual bool is_empty() const override {
     return count_ == 0;
   }
 
-  void clear() override {
+  virtual void clear() override {
     hot_.clear();
     for (auto c : cold_)
       c.clear();
     count_ = 0;
   }
 
-  std::size_t size() const override {
+  virtual std::size_t size() const override {
     return hot_.size() + cold_.size();
   }
 
 public:
-  HeapType hot_;                                // Hot queue.
+  HeapType hot_;                               // Hot queue.
   std::vector<std::vector<ElementType>> cold_; // Cold buckets.
 
   int threshold_ {-1}; // each hot element's priority < (threshold_ + 1)*kc_
   double kc_ = 1.4143; // size of each bucket
 
-private:
-  void erase_from_cold(ElementType n) {
+protected:
+  void erase_from_cold(const ElementType &n) {
     int i = PriorityHandler::get_priority(n) / kc_;
     if (i > threshold_) {
+      int f = find(n);
       cold_[i - threshold_ - 1].erase(
           cold_[i - threshold_ - 1].begin() + find(n));
     } else {
@@ -127,9 +131,8 @@ private:
     }
   }
 
-private:
+protected:
   int count_ = 0;
-
 };
 
 

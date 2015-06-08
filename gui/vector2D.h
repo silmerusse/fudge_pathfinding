@@ -3,6 +3,8 @@
 
 #include <math.h>
 #include <utility>
+#include <string>
+#include <sstream>
 
 constexpr double kPI  =3.141592653589793238463;
 
@@ -108,6 +110,13 @@ public:
     double ty = sin(t) * x + cos(t) * y;
     x = tx;
     y = ty;
+  }
+
+  const std::string to_string() const {
+    std::ostringstream ss;
+    ss << x << ',' << y;
+    return ss.str();
+
   }
 };
 

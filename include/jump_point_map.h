@@ -19,28 +19,28 @@ using NodeType = Coord;
 template <typename CostType>
 class JumpPointMap : public GridMap<CostType> {
 public:
-  JumpPointMap(int w, int h, vector<CostType> &matrix)
+  JumpPointMap(int w, int h, std::vector<CostType> &matrix)
       : GridMap<CostType>(w, h, matrix) {};
   virtual ~JumpPointMap() = default;
 
 public:
   // Override to return edges with destination nodes that are jump points.
-  const vector<Edge<NodeType, CostType>> edges(NodeType &n) override{
-    vector <Edge<NodeType, CostType>> es;
+  const std::vector<Edge<NodeType, CostType>> edges(NodeType &n) override{
+    std::vector <Edge<NodeType, CostType>> es;
 
     // Search and add jump points at all directions for start node.
     // For others, only search at necessary directions.
     if (this->node(n)->parent_->c_ == n) {
-      const vector<Coord> &&coords = this->coord_8_neighbors(n);
+      const std::vector<Coord> &&coords = this->coord_8_neighbors(n);
       for (auto c : coords) {
         push_jump_point(es, c.first, c.second, n);
       }
     } else {
       // Normalize
       int dx = (x(n) - this->node(n)->parent_->x())
-          / max(abs(x(n) - this->node(n)->parent_->x()), 1);
+          / std::max(abs(x(n) - this->node(n)->parent_->x()), 1);
       int dy = (y(n) - this->node(n)->parent_->y())
-          / max(abs(y(n) - this->node(n)->parent_->y()), 1);
+          / std::max(abs(y(n) - this->node(n)->parent_->y()), 1);
 
       if (dx != 0 && dy != 0){ // diagonal move
         //   - + +          x: obstacle
@@ -145,7 +145,7 @@ protected:
   }
 
   // Helper to push a jump point found to the container.
-  void push_jump_point(vector<Edge<NodeType, CostType>> &es, int x, int y,
+  void push_jump_point(std::vector<Edge<NodeType, CostType>> &es, int x, int y,
                        const NodeType &n) {
     NodeType jp = find_jump_point(x, y, n);
     if (jp != INVALID_NODE)

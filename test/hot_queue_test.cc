@@ -3,7 +3,6 @@
 #include "hot_queue.h"
 #include "priority_queue_stl.h"
 
-
 template<typename T>
 class ScalarPriority {
 public:
@@ -19,7 +18,6 @@ public:
     n0 = v;
   }
 };
-
 
 template<typename Q>
 const std::string stringify_q (const Q &q) {

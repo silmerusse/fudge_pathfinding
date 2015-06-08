@@ -2,7 +2,6 @@
 #include "binary_heap.h"
 #include "grid_node.h"
 
-
 template<typename T>
 class ScalarPriority {
 public:
@@ -20,8 +19,8 @@ public:
 };
 
 template<typename Q>
-static const string stringify_q(const Q &q) {
-  ostringstream ss;
+static const std::string stringify_q(const Q &q) {
+  std::ostringstream ss;
   for (auto i = q.queue_.begin(); i != q.queue_.end(); i++) {
     ss << *i <<",";
   }
@@ -35,14 +34,13 @@ static const char *stringify(const BinaryHeap<int, int,
 
 static const char *stringify(
     const BinaryHeap<GridNode<int>*, int, GridNode<int>> &q) {
-  return stringify_q<BinaryHeap<GridNode<int>*, int,
-                                                GridNode<int>>>(q).c_str();
+  return stringify_q<BinaryHeap<GridNode<int>*, int, GridNode<int>>>(q).c_str();
 }
 
 static const char *stringify(
     const BinaryHeap<GridNode<double>*, double, GridNode<double>> &q) {
   return stringify_q<BinaryHeap<GridNode<double>*, double,
-                                                GridNode<double>>>(q).c_str();
+      GridNode<double>>>(q).c_str();
 }
 
 
@@ -127,7 +125,7 @@ TEST(BinaryHeap, insert_remove_increase_int) {
 
 
 TEST(BinaryHeap, increase_priority_node_int) {
-  using C = pair<int,int>;
+  using C = std::pair<int,int>;
   using CostType = int;
 
   BinaryHeap<GridNode<CostType>*, int, GridNode<CostType>> q;
@@ -200,7 +198,7 @@ TEST(BinaryHeap, increase_priority_node_int) {
 }
 
 TEST(BinaryHeap, increase_priority_node_double) {
-  using C = pair<int,int>;
+  using C = std::pair<int,int>;
   using CostType = double;
 
   BinaryHeap<GridNode<CostType>*, CostType, GridNode<CostType>> q;

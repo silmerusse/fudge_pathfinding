@@ -35,8 +35,8 @@ public:
   }
 
   const std::string to_string() const {
-    ostringstream ss;
-    ss << "Vertex Matrix:" << endl;
+    std::ostringstream ss;
+    ss << "Vertex Matrix:" << std::endl;
 
     for (int i=0; i<height_; i++) {
       for (int j=0; j<width_; j++) {
@@ -52,7 +52,7 @@ public:
           c = v + '0';
         ss << c;
       }
-      ss << endl;
+      ss << std::endl;
     }
     return ss.str();
   }

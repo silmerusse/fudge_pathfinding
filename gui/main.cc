@@ -22,8 +22,8 @@ int main() {
   };
 
   // Load textures.
-  TextureManager tm;
-  if (!tm.load_textures(canvas.renderer_,
+  std::unique_ptr<TextureManager> tm(new TextureManager());
+  if (!tm->load_textures(canvas.renderer_,
                         {{"tile", "img/tile.png"},
                          {"wall", "img/wall.png"},
                          {"unit", "img/unit.png"}})) {
@@ -32,14 +32,14 @@ int main() {
   }
 
   // Load game.
-  Game game(kWidth, kHeight);
-  game.load("data", kCols, kRows, kGridWidth, kGridHeight);
-  game.initialize_objects(tm);
+  Game game(kWidth, kHeight, tm);
+  game.initialize_objects("data", kCols, kRows, kGridWidth, kGridHeight);
 
   // Setup a viewport.
   std::unique_ptr<Viewport> v(new Viewport(SDL_Rect{0, 0, kWidth, kHeight}));
   std::unique_ptr<Camera> camera(new Camera(SDL_Rect{0, 0, kWidth, kHeight},
-                                            &game, {"tiles", "units"}));
+                                            &game,
+                                            {"tiles", "units", "airbornes"}));
   v->observe(std::move(camera));
 
   // Add the viewport to canvas.

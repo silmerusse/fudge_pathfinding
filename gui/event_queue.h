@@ -25,9 +25,11 @@ public:
   }
 
   void pop_front_notify_listeners() {
-    std::shared_ptr<Event> e = pop_front();
-    for (auto &listener : listeners_)
-      listener->event_queue_->push_back(e);
+    if (!empty()) {
+      std::shared_ptr<Event> e = pop_front();
+      for (auto &listener : listeners_)
+        listener->event_queue_->push_back(e);
+    }
   }
 
   void register_listener(Object *object) {

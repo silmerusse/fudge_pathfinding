@@ -35,7 +35,7 @@ public:
   int w_ = 0;
   int h_ = 0;
   int z_order_ = 0;
-
+  bool visible_ = true;
 };
 
 #endif /* RENDERABLE_H_ */
