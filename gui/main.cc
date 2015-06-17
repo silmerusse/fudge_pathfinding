@@ -22,8 +22,8 @@ int main() {
   };
 
   // Load textures.
-  std::unique_ptr<TextureManager> tm(new TextureManager());
-  if (!tm->load_textures(canvas.renderer_,
+  std::unique_ptr<TextureManager> texture_manager(new TextureManager());
+  if (!texture_manager->load_textures(canvas.renderer_,
                         {{"tile", "img/tile.png"},
                          {"wall", "img/wall.png"},
                          {"unit", "img/unit.png"}})) {
@@ -31,8 +31,11 @@ int main() {
     return -1;
   }
 
+  std::unique_ptr<InteractionManager>
+  interaction_manager(new InteractionManager());
+
   // Load game.
-  Game game(kWidth, kHeight, tm);
+  Game game(kWidth, kHeight, texture_manager, interaction_manager);
   game.initialize_objects("data", kCols, kRows, kGridWidth, kGridHeight);
 
   // Setup a viewport.
@@ -56,7 +59,7 @@ int main() {
         running = false;
         break;
       default:
-        canvas.handle_event(e);
+        canvas.dispatch_event(e);
       }
     }
 

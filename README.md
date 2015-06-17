@@ -4,7 +4,7 @@ An implementation of JPS(Jump Point Search) for tiled map is provided as an exte
 
 Run "cmake" to generate makefiles and "make" to build the source code. 
 
-A simple GUI app is also included under "gui" directory to demostrate agent pathfinding. To build the app, please make sure "SDL" and "JsonCpp" packages are installed.
+A simple GUI app is also included under "gui" directory to demostrate agent pathfinding. To build the app, please make sure "SDL" package is installed.
 
 Tests require "GoogleTest" package.
  
