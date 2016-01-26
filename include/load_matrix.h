@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "log.h"
+#include "util/log.h"
 
 template <typename WeightType>
 static std::vector<WeightType> load_matrix(const std::string &filename) {

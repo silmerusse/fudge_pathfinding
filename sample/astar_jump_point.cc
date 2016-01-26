@@ -2,7 +2,7 @@
 #include "jump_point_map.h"
 #include "astar_search.h"
 #include "load_matrix.h"
-#include "time_util.h"
+#include "util/time_util.h"
 
 // Find path from start position to target position using Jump Point algorithm.
 int main (int argc, char *argv[]) {

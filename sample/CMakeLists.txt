@@ -5,4 +5,7 @@ add_executable(dijkstra_water_jug dijkstra_water_jug.cc)
 add_executable(astar_multi_agent_map astar_multi_agent_map.cc)
 add_executable(astar_torches_puzzle astar_torches_puzzle.cc)
 
+include_directories("../include")
 	
+SET(CMAKE_CXX_FLAGS "-std=c++0x")
+

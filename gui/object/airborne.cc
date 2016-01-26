@@ -1,5 +1,5 @@
 #include "airborne.h"
-#include "game.h"
+#include "../game.h"
 
 Airborne::Airborne() {
   event_target_->register_handler("airborne_move_to",

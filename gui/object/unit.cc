@@ -1,7 +1,7 @@
 #include "unit.h"
 #include "astar_search.h"
 #include "grid_map.h"
-#include "game.h"
+#include "../game.h"
 
 void Unit::tick(unsigned long ticks) {
   Object::tick(ticks);

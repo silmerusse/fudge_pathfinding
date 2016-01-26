@@ -2,7 +2,7 @@
 #define JUMP_POINT_MAP_H_
 
 #include <algorithm>
-#include "log.h"
+#include "util/log.h"
 #include "node_state.h"
 #include "grid_map.h"
 #include "search_stats.h"

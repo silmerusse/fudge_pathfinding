@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <functional>
 
-#include "log.h"
+#include "util/log.h"
 
 #include "search_stats.h"
 #include "node_state.h"

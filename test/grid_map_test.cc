@@ -2,7 +2,7 @@
 #include "grid_map.h"
 #include "astar_search.h"
 #include "load_matrix.h"
-#include "time_util.h"
+#include "util/time_util.h"
 
 // Helper to print and return result.
 const std::string print_result(const std::vector<Coord> &path,

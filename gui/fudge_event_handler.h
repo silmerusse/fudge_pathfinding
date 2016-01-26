@@ -1,13 +1,13 @@
-#ifndef FUDGE_PATHFINDING_GUI_FUDGE_INTERACTION_MANAGER_H_
-#define FUDGE_PATHFINDING_GUI_FUDGE_INTERACTION_MANAGER_H_
+#ifndef FUDGE_PATHFINDING_GUI_FUDGE_EVENT_HANDLER_H_
+#define FUDGE_PATHFINDING_GUI_FUDGE_EVENT_HANDLER_H_
 
-#include "fruitcandy/engine/interaction_manager.h"
+#include "fruitcandy/engine/event_handler.h"
 #include "fruitcandy/engine/object.h"
 
-class FudgeInteractionManager : public InteractionManager {
+class FudgeEventHandler : public EventHandler {
 public:
-  FudgeInteractionManager(Realm *realm) : InteractionManager(realm) {}
-  virtual ~FudgeInteractionManager() = default;
+  FudgeEventHandler(Realm *realm) : EventHandler(realm) {}
+  virtual ~FudgeEventHandler() = default;
 
 public:
   virtual void handle_mouse_button_down(unsigned int button, 
@@ -48,4 +48,4 @@ private:
   int y_ = 0;
 };
 
-#endif /* FUDGE_PATHFINDING_GUI_FUDGE_INTERACTION_MANAGER_H_ */
+#endif /* FUDGE_PATHFINDING_GUI_FUDGE_EVENT_HANDLER_H_ */

@@ -2,7 +2,7 @@
 #include <iostream>
 #include "water_jug_map.h"
 #include "astar_search.h"
-#include "time_util.h"
+#include "util/time_util.h"
 
 // There are 4 jugs with maximal capacity of 21, 15, 8, and 5 liter each.
 // We could pour water from one jug to another jug to fill the other jug

@@ -3,7 +3,7 @@
 
 #include <algorithm>
 #include <math.h>
-#include "log.h"
+#include "util/log.h"
 #include "node_state.h"
 #include "map.h"
 #include "vertex_matrix.h"

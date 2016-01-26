@@ -1,7 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <gtest/gtest.h>
-#include "time_util.h"
+#include "util/time_util.h"
 #include "load_matrix.h"
 #include "rra.h"
 

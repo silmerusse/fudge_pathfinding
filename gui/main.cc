@@ -3,6 +3,7 @@
 #include "fruitcandy/util/log.h"
 #include "fruitcandy/engine/canvas.h"
 #include "fruitcandy/engine/viewport.h"
+#include "fruitcandy/engine/main_loop.h"
 
 #include "game.h"
 
@@ -47,8 +48,8 @@ int main() {
     new Camera(SDL_Rect{0, 0, kWidth, kHeight},
                &game,
                {"tiles", "units", "airbornes"}, 
-               std::unique_ptr<FudgeInteractionManager>(
-                 new FudgeInteractionManager(&game))));
+               std::unique_ptr<FudgeEventHandler>(
+                 new FudgeEventHandler(&game))));
 
   viewport->observe(std::move(camera));
 
@@ -56,35 +57,7 @@ int main() {
   canvas.add_panel(std::move(viewport));
 
   // Main loop.
-  SDL_Event e;
-  Uint32 start = SDL_GetTicks(); // Start timer.
-  bool running = true;
-
-  while(running) {
-    // Handle events.
-    while(SDL_PollEvent(&e) != 0) {
-      switch (e.type) {
-      case SDL_QUIT:
-        running = false;
-        break;
-      default:
-        canvas.dispatch_event(e);
-      }
-    }
-
-    Uint32 now = SDL_GetTicks();
-    if (now - start >= 10) { // Timeout. Not likely > 49 days.
-      start = now;
-
-      // Tick and render everything.
-      game.tick(now);
-      canvas.update();
-      canvas.render();
-    }
-
-    // Pace control.
-    SDL_Delay(100);
-  }
+  main_loop(canvas, [&](unsigned long now){game.tick(now);}, 100);
 
   return EXIT_SUCCESS;
 }

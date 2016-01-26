@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 #include "sliding_puzzle_map.h"
 #include "astar_search.h"
-#include "time_util.h"
+#include "util/time_util.h"
 
 // Helper to print and return result.
 void print_result(const std::vector<SlidingPosition> &path,

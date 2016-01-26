@@ -5,7 +5,7 @@
 #include "fruitcandy/engine/realm.h"
 
 #include "object/airborne.h"
-#include "fudge_interaction_manager.h"
+#include "fudge_event_handler.h"
 
 #define TEXTURE_TILE 1
 #define TEXTURE_WALL 2
@@ -18,8 +18,8 @@ public:
   virtual ~Game() = default;
 
 public:
-  bool load_assets(const std::string &path);
-  bool initialize_assets();
+  bool load_assets(const std::string &path) override;
+  bool initialize_assets() override;
   bool initialize_objects(const std::string &path, int cols, int rows,
                           int grid_width, int grid_height);
 

@@ -2,7 +2,7 @@
 #include <iostream>
 #include "sliding_puzzle_map.h"
 #include "astar_search.h"
-#include "time_util.h"
+#include "util/time_util.h"
 
 // There's a puzzle with initial position like this:
 // 876

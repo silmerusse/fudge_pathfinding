@@ -5,9 +5,9 @@
 #include <map>
 #include <utility>
 #include <sstream>
+#include "util/log.h"
 #include "map.h"
 #include "node_state.h"
-#include "log.h"
 #include "search_stats.h"
 #include "hot_queue.h"
 #include "binary_heap.h"

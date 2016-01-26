@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 #include "multi_agent_map.h"
 #include "astar_search.h"
-#include "time_util.h"
+#include "util/time_util.h"
 #include "load_matrix.h"
 
 using NodeType = std::shared_ptr<MultiAgentNode>;

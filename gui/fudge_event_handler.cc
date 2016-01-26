@@ -3,9 +3,9 @@
 
 #include "object/unit.h"
 #include "game.h"
-#include "fudge_interaction_manager.h"
+#include "fudge_event_handler.h"
 
-void FudgeInteractionManager::handle_mouse_button_down(unsigned int button, 
+void FudgeEventHandler::handle_mouse_button_down(unsigned int button, 
                                                     int x, int y) {
   x_ = x;
   y_ = y;
@@ -41,7 +41,7 @@ void FudgeInteractionManager::handle_mouse_button_down(unsigned int button,
   }
 }
 
-void FudgeInteractionManager::handle_mouse_motion(int x, int y, 
+void FudgeEventHandler::handle_mouse_motion(int x, int y, 
                                                int xrel, int yrel) {
   x_ = x;
   y_ = y;
@@ -53,7 +53,7 @@ void FudgeInteractionManager::handle_mouse_motion(int x, int y,
   }
 }
 
-void FudgeInteractionManager::handle_key_down(int keycode, bool repeat) {
+void FudgeEventHandler::handle_key_down(int keycode, bool repeat) {
 
   Game *game = static_cast<Game*>(realm_);
 

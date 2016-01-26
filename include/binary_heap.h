@@ -30,7 +30,8 @@ public:
     queue_[0] =  queue_.back();
     queue_.pop_back();
 
-    down(0);
+    if (queue_.size())
+      down(0);
     return front;
   }
 

@@ -1,7 +1,7 @@
 #include <memory>
 #include <iostream>
 #include "astar_search.h"
-#include "time_util.h"
+#include "util/time_util.h"
 #include "torches_puzzle.h"
 
 // There are 7 torches. Each true controls another two torches. 
