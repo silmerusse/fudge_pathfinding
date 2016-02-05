@@ -1,6 +1,7 @@
+#include <fruitcandy/json/json_item_loader.h>
+
 #include "object/tile.h"
 #include "object/unit.h"
-#include "fruitcandy/json/json_item_loader.h"
 #include "game.h"
 #include "load_matrix.h"
 
@@ -17,10 +18,12 @@ bool Game::load_assets(const std::string &path) {
 }
 
 bool Game::initialize_assets() {
-  graphics_->assets_->traverse<Texture>("texture",
-                                        std::bind([&](Texture *texture) {
-    texture->open(graphics_->renderer_);
-  }, std::placeholders::_1));
+  graphics_->assets_->traverse<Texture>(
+      "texture",
+      std::bind([&](Texture *texture) {
+                  texture->open(graphics_->renderer_);
+                }, 
+                std::placeholders::_1));
   INFO("Textures initialized.");
 
   INFO("Assets initialized.");
@@ -34,7 +37,7 @@ bool Game::initialize_objects(const std::string &path, int cols, int rows,
   grid_width_ = grid_width;
   grid_height_ = grid_height;
 
-  matrix_ = load_matrix<double>(path + "/matrix_10x10_wall.txt");
+  matrix_ = fudge::load_matrix<double>(path + "/matrix_10x10_wall.txt");
 
   // Create tiles.
   for (auto r = 0; r < rows; ++r) {

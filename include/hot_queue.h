@@ -1,5 +1,5 @@
-#ifndef HOT_QUEUE_H_
-#define HOT_QUEUE_H_
+#ifndef FUDGE_HOT_QUEUE_H_
+#define FUDGE_HOT_QUEUE_H_
 
 #include <cassert>
 #include <vector>
@@ -11,6 +11,9 @@
 // High priority elements will be put to hot and others will be put to cold.
 // When there's no element in hot, threshold increases, and part of the elements
 // in cold would be moved to hot.
+
+namespace fudge {
+
 template <typename ElementType, typename PriorityType, typename PriorityHandler,
                                                              typename HeapType>
 class HotQueue
@@ -135,5 +138,6 @@ protected:
   int count_ = 0;
 };
 
+}
 
-#endif /* HOT_QUEUE_H_ */
+#endif /* FUDGE_HOT_QUEUE_H_ */

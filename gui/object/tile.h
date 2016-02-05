@@ -1,7 +1,7 @@
 #ifndef FUDGE_PATHFINDING_GUI_OBJECT_TILE_H_
 #define FUDGE_PATHFINDING_GUI_OBJECT_TILE_H_
 
-#include "fruitcandy/engine/object.h"
+#include "fruitcandy/core/object.h"
 
 class Realm;
 

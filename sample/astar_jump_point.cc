@@ -4,23 +4,27 @@
 #include "load_matrix.h"
 #include "util/time_util.h"
 
-// Find path from start position to target position using Jump Point algorithm.
+// Search shortest path using Jump Point Search algorithm.
 int main (int argc, char *argv[]) {
-  std::vector<double> matrix = load_matrix<double>("../data/matrix_10x10_wall.txt");
+  std::vector<double> matrix = fudge::load_matrix<double>(
+      "../data/matrix_10x10_wall.txt");
+
+  fudge::JumpPointMap<double> map(10, 10, matrix);
+  fudge::Coord start(7, 0);
+  fudge::Coord goal(4, 1);
+  map.goal_ = goal; // This is needed for checking Jump Point.
 
   PREPARE_TIMER
   START_TIMER
-  JumpPointMap<double> map(10, 10, matrix);
-  Coord start = Coord(7, 0);
-  Coord goal = Coord(4, 1);
-  map.goal_ = goal; // This is needed for checking Jump Point.
-  std::vector<Coord> &&path = AStarSearch::search(
+
+  const std::vector<fudge::Coord> path = fudge::astar_search(
       map, start, goal,
-      GridMap<double>::diagonal_distance);
+      fudge::GridMap<double>::diagonal_distance);
+
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  for (auto e : path)
+  for (const auto &e : path)
     std::cout << map.node(e)->to_string() << std::endl;
   std::cout << map.to_string() << std::endl;
 

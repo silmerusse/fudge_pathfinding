@@ -11,16 +11,18 @@
 // We want to reach the target state that 4 jugs have 7, 7, 7, and 0 liter of
 // water each.
 int main (int argc, char *argv[]) {
-  PREPARE_TIMER
-  START_TIMER
   WaterJugMap map(std::vector<int>{21, 15, 8, 5});
 
-  std::vector<WaterJugPosition> &&path = AStarSearch::search(
+  PREPARE_TIMER
+  START_TIMER
+
+  const std::vector<WaterJugPosition> path = fudge::astar_search(
       map,
       WaterJugPosition({21, 0, 0, 0}),
       WaterJugPosition({7, 7, 7, 0}),
       std::bind(&WaterJugMap::heuristic, map,
                 std::placeholders::_1, std::placeholders::_2));
+
   END_TIMER
   PRINT_TIME_ELAPSED
 

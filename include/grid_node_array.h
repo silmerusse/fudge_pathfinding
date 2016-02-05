@@ -1,5 +1,5 @@
-#ifndef GRID_NODE_ARRAY_H_
-#define GRID_NODE_ARRAY_H_
+#ifndef FUDGE_GRID_NODE_ARRAY_H_
+#define FUDGE_GRID_NODE_ARRAY_H_
 
 #include <string>
 #include <sstream>
@@ -7,6 +7,9 @@
 #include "grid_node.h"
 
 // This is used to hold grid nodes for quick indexing.
+
+namespace fudge {
+
 template<typename CostType>
 class GridNodeArray {
 public:
@@ -47,5 +50,6 @@ private:
   std::unique_ptr<GridNode<CostType>> array_ = nullptr;
 };
 
+}
 
-#endif /* GRID_NODE_ARRAY_H_ */
+#endif /* FUDGE_GRID_NODE_ARRAY_H_ */

@@ -4,7 +4,7 @@
 #include <sstream>
 #include "position_map.h"
 
-class WaterJugPosition : public Position<int, int, std::string> {
+class WaterJugPosition : public fudge::Position<int, int, std::string> {
 public:
   WaterJugPosition(const std::vector<int> &pos) : Position(pos) {};
   WaterJugPosition() {};
@@ -23,8 +23,8 @@ public:
   }
 };
 
-class WaterJugMap : public PositionMap<std::string, WaterJugPosition, 
-                                       int, std::string> {
+class WaterJugMap 
+  : public fudge::PositionMap<std::string, WaterJugPosition, int, std::string> {
 public:
   WaterJugMap(const std::vector<int> &jugs) : jugs_(jugs) {}
   virtual ~WaterJugMap() = default;
@@ -38,9 +38,9 @@ public:
   }
 
 public:
-  virtual const std::vector<Edge<WaterJugPosition, int>> 
-  edges (WaterJugPosition &n) override {
-    std::vector<Edge<WaterJugPosition, int>> edges;
+  virtual const std::vector<fudge::Edge<WaterJugPosition, int>> 
+  edges (const WaterJugPosition &n) override {
+    std::vector<fudge::Edge<WaterJugPosition, int>> edges;
 
     for (auto i = n.pos_.begin(); i != n.pos_.end(); ++i) {
       if (*i > 0) {
@@ -56,7 +56,7 @@ public:
               int dd = std::min(d, *i);
               n1.pos_[pos1] += dd;
               n1.pos_[pos] -= dd;
-              Edge<WaterJugPosition, int> edge (n, n1, 1);
+              fudge::Edge<WaterJugPosition, int> edge (n, n1, 1);
               edges.push_back(edge);
             }
           } 

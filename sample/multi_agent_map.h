@@ -140,7 +140,7 @@ public:
   std::shared_ptr<MultiAgentNode> parent_;
 
   // State of the node.
-  NodeState state_ = NodeState::unexplored;
+  fudge::NodeState state_ = fudge::NodeState::unexplored;
 
   // Indicate whether this has been expanded. After it's expanded, the possible
   // moves of the first Agent in the unplanned list should be added to expanded
@@ -236,7 +236,7 @@ struct NodeHash {
  };
 };
 
-class MultiAgentMap : public Map<std::shared_ptr<MultiAgentNode>, int> {
+class MultiAgentMap : public fudge::Map<std::shared_ptr<MultiAgentNode>, int> {
 
   using NodeType = std::shared_ptr<MultiAgentNode>;
 
@@ -269,12 +269,13 @@ public:
     int sum = 0;
     for (auto i = n0->planned_.begin(); i != n0->planned_.end(); ++i) {
       int d = rra_.search(i->agent_.end_, i->to_,
-          GridMap<int>::manhattan_distance);
+          fudge::GridMap<int>::manhattan_distance);
       sum += d * i->agent_.speed_;
     }
     for (auto i = n0->unplanned_.begin(); i != n0->unplanned_.end(); ++i) {
       Agent a = *i;
-      int d = rra_.search(a.end_, a.pos_, GridMap<int>::manhattan_distance);
+      int d = rra_.search(a.end_, a.pos_, 
+                          fudge::GridMap<int>::manhattan_distance);
       sum += d * a.speed_;
     }
     return sum * weight_;
@@ -284,12 +285,12 @@ public:
   int heuristic_manhattan(const NodeType n0, const NodeType n1) {
     int sum = 0;
     for (auto i = n0->planned_.begin(); i != n0->planned_.end(); ++i) {
-      int d = GridMap<int>::manhattan_distance(i->to_, i->agent_.end_);
+      int d = fudge::GridMap<int>::manhattan_distance(i->to_, i->agent_.end_);
       sum += d * i->agent_.speed_;
     }
     for (auto i = n0->unplanned_.begin(); i != n0->unplanned_.end(); ++i) {
       Agent a = *i;
-      int d = GridMap<int>::manhattan_distance(a.pos_, a.end_);
+      int d = fudge::GridMap<int>::manhattan_distance(a.pos_, a.end_);
       sum += d * a.speed_;
     }
     return sum * weight_;
@@ -297,8 +298,9 @@ public:
 
 public:
   // Generate all valid edges for the node.
-  const std::vector<Edge<NodeType, int>> edges (NodeType &from) override {
-    std::vector<Edge<NodeType, int>> result;
+  const std::vector<fudge::Edge<NodeType, int>> 
+  edges(const NodeType &from) override {
+    std::vector<fudge::Edge<NodeType, int>> result;
 
     // Expand the parent node if it's not expanded.
     if (!from->expanded_&& !from->unplanned_.empty()) {
@@ -348,7 +350,7 @@ public:
 
         // Generate a new edge.
         to->hash();
-        result.push_back(Edge<NodeType, int>(from, to, 1));
+        result.push_back(fudge::Edge<NodeType, int>(from, to, 1));
       }
     }
 
@@ -372,35 +374,36 @@ public:
     return *n0 == *n1;
   }
 
-  bool node_unexplored(const NodeType &n) const override {
+  bool is_node_unexplored(const NodeType &n) const override {
     if (map_.find(n) != map_.end())
       return false;
     return true;
   }
 
-  bool node_open(const NodeType &n) const override {
-    return map_.find(n)->second->state_ == NodeState::open;
+  bool is_node_open(const NodeType &n) const override {
+    return map_.find(n)->second->state_ == fudge::NodeState::open;
   }
 
   bool open_node_available() const override {
     return !(open_list_.is_empty());
   }
 
-  void open_node(NodeType &n, int g, int h, const NodeType &p) override {
-    n->parent_ = p;
-    n->cost_ = g + h;
-    n->g_ = g;
-    open_list_.insert(n);
-    n->state_ = NodeState::open;
+  void open_node(const NodeType &n, int g, int h, const NodeType &p) override {
+    auto nn = n;
+    nn->parent_ = p;
+    nn->cost_ = g + h;
+    nn->g_ = g;
+    nn->state_ = fudge::NodeState::open;
+    open_list_.insert(nn);
     ++stats_.nodes_opened;
 
     // Add this to prevent an expanding node to add multiple times to open list.
-    if (node_unexplored(n)) {
-      map_.emplace(n, n);
+    if (is_node_unexplored(n)) {
+      map_.emplace(nn, nn);
     }
 
     DEBUG("Node opened: %40s(%d)\t0x%zx \t<- %20s(%d)\t0x%zx",
-              n->to_string().c_str(), n->cost_, n->hash_,
+              nn->to_string().c_str(), nn->cost_, nn->hash_,
               p->to_string().c_str(), p->cost_, p->hash_);
 
     if (stats_.nodes_opened%50000 == 0) {
@@ -409,24 +412,26 @@ public:
     }
   }
 
-  void reopen_node(NodeType &n, int g, int h, const NodeType &p) override {
-    n->parent_ = p;
-    n->cost_ = g + h;
-    n->g_ = g;
-    open_list_.insert(n);
-    n->state_ = NodeState::open;
+  void reopen_node(const NodeType &n, int g, int h, 
+                   const NodeType &p) override {
+    auto nn = n;
+    nn->parent_ = p;
+    nn->cost_ = g + h;
+    nn->g_ = g;
+    nn->state_ = fudge::NodeState::open;
+    open_list_.insert(nn);
     ++stats_.nodes_reopened;
 
-    map_.emplace(n, n);
+    map_.emplace(nn, nn);
     DEBUG("Node reopened: %s(%d)\t0x%zx <- %s(%d)\t0x%zx",
-        n->to_string().c_str(), n->cost_, n->hash_,
+        nn->to_string().c_str(), nn->cost_, nn->hash_,
         p->to_string().c_str(), p->cost_, p->hash_);
   }
 
-  NodeType close_front_open_node() override {
+  NodeType take_out_top_node() override {
     NodeType n = open_list_.front();
     open_list_.remove_front();
-    n->state_ = NodeState::closed;
+    n->state_ = fudge::NodeState::closed;
     ++stats_.nodes_closed;
     auto p = n->parent_;
 
@@ -436,19 +441,19 @@ public:
     return n;
   }
 
-  void increase_node_priority(NodeType &n, int g, int h,
+  void increase_node_priority(const NodeType &n, int g, int h,
                               const NodeType &p) override {
-    auto o = map_.find(n)->second;
-    o = n;
-    o->parent_ = p;
-    o->cost_ = g + h;
-    o->g_ = g;
-
-    o->state_ = NodeState::open;
+    //auto o = map_.find(n)->second;
+    auto nn = n;
+    nn->parent_ = p;
+    nn->cost_ = g + h;
+    nn->g_ = g;
+    nn->state_ = fudge::NodeState::open;
     ++stats_.nodes_opened;
 
-    map_.emplace(o, o);
-    DEBUG("Node priority increased: %s(%d)", n->to_string().c_str(), n->cost_);
+    map_.emplace(nn, nn);
+    DEBUG("Node priority increased: %s(%d)", 
+        nn->to_string().c_str(), nn->cost_);
   }
 
   std::vector<NodeType> get_path(const NodeType &n) override {
@@ -468,18 +473,18 @@ public:
   }
 
 public:
-  SearchStats stats_;
+  fudge::SearchStats stats_;
 
 private:
   // The performance of hot queue should be better than
   // a patched STL priority queue.
-  HotQueue<NodeType, int, MultiAgentMap,
-      PriorityQueueSTL<NodeType, int, MultiAgentMap>> open_list_;
+  fudge::HotQueue<NodeType, int, MultiAgentMap,
+      fudge::PriorityQueueSTL<NodeType, int, MultiAgentMap>> open_list_;
   //PriorityQueueSTL<NodeType, int, MovingObjectsMap> open_list_;
 
-  GridMap<int> grid_map_;
+  fudge::GridMap<int> grid_map_;
   std::unordered_multimap<NodeType, NodeType, NodeHash, NodeEqual> map_;
-  RRA<int> rra_;
+  fudge::RRA<int> rra_;
   double weight_;
 
 private:
@@ -508,10 +513,12 @@ private:
 
     // Sort to expand from the highest possible direction.
     std::sort(moves.begin(), moves.end(), [&](const Move &a, const Move &b) {
-      //return GridMap<int>::manhattan_distance(a.to_, a.agent_.end_)
-      //    < GridMap<int>::manhattan_distance(b.to_, b.agent_.end_);
-      return rra_.search(a.agent_.end_, a.to_, GridMap<int>::manhattan_distance)
-          < rra_.search(a.agent_.end_, a.to_, GridMap<int>::manhattan_distance);
+      return (
+        rra_.search(a.agent_.end_, a.to_, 
+                    fudge::GridMap<int>::manhattan_distance)
+        < rra_.search(a.agent_.end_, a.to_, 
+                      fudge::GridMap<int>::manhattan_distance)
+      );
     });
 
     return moves;

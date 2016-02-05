@@ -6,8 +6,8 @@
 #include "util/time_util.h"
 
 // Helper to print and return result.
-const std::string print_result(const std::vector<Coord> &path,
-                               const JumpPointMap<double> &map) {
+const std::string print_result(const std::vector<fudge::Coord> &path,
+                               const fudge::JumpPointMap<double> &map) {
   std::cout << "--------------------\n";
   std::ostringstream ss;
   for (auto i = path.rbegin(); i != path.rend(); ++i)
@@ -19,20 +19,21 @@ const std::string print_result(const std::vector<Coord> &path,
 
 
 TEST(JumpPointMap, search_10x10) {
-  std::vector<double> matrix = load_matrix<double>(
+  std::vector<double> matrix = fudge::load_matrix<double>(
       "../data/matrix_10x10_plain.txt");
 
   PREPARE_TIMER
   START_TIMER
-    JumpPointMap<double> map(10, 10, matrix);
-    map.goal_ = Coord(9, 9);
-    std::vector<Coord> &&path = AStarSearch::search(
-        map, Coord(0, 0), Coord(9, 9), GridMap<double>::diagonal_distance);
+    fudge::JumpPointMap<double> map(10, 10, matrix);
+    map.goal_ = fudge::Coord(9, 9);
+    const std::vector<fudge::Coord> path0 = fudge::astar_search(
+        map, fudge::Coord(0, 0), fudge::Coord(9, 9), 
+        fudge::GridMap<double>::diagonal_distance);
 
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  std::string result = print_result(path, map);
+  std::string result = print_result(path0, map);
 
   std::string expected = std::string("") +
       "(9,9)<-(0,0) g:12.7287 f:12.7287" + "\n" +
@@ -59,15 +60,16 @@ TEST(JumpPointMap, search_10x10) {
    * Second search.
    */
   START_TIMER
-    JumpPointMap<double> map2(10, 10, matrix);
-    map2.goal_ = Coord(0, 9);
-    path = AStarSearch::search(map2, Coord(9, 0), Coord(0, 9),
-                               GridMap<double>::duclidean_distance);
+    fudge::JumpPointMap<double> map2(10, 10, matrix);
+    map2.goal_ = fudge::Coord(0, 9);
+    const std::vector<fudge::Coord> path1 = fudge::astar_search(
+        map2, fudge::Coord(9, 0), fudge::Coord(0, 9),
+        fudge::GridMap<double>::duclidean_distance);
 
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  std::string result2 = print_result(path, map2);
+  std::string result2 = print_result(path1, map2);
 
   std::string expected2 = std::string("") +
       "(0,9)<-(9,0) g:12.7287 f:12.7287" + "\n" +
@@ -92,16 +94,16 @@ TEST(JumpPointMap, search_10x10) {
 }
 
 TEST(JumpPointMap, search_10x10_wall) {
-  std::vector<double> matrix2 = load_matrix<double>(
+  std::vector<double> matrix2 = fudge::load_matrix<double>(
       "../data/matrix_10x10_wall.txt");
 
   PREPARE_TIMER
   START_TIMER
-    JumpPointMap<double> map(10, 10, matrix2);
-  map.goal_ = Coord(4, 1);
-  std::vector<Coord> &&path = AStarSearch::search(
-        map, Coord(7, 0), Coord(4, 1),
-        GridMap<double>::diagonal_distance);
+    fudge::JumpPointMap<double> map(10, 10, matrix2);
+  map.goal_ = fudge::Coord(4, 1);
+  const std::vector<fudge::Coord> path = fudge::astar_search(
+        map, fudge::Coord(7, 0), fudge::Coord(4, 1),
+        fudge::GridMap<double>::diagonal_distance);
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -138,16 +140,16 @@ TEST(JumpPointMap, search_10x10_wall) {
 }
 
 TEST(JumpPointMap, search_100x100) {
-  std::vector<double> matrix2 = load_matrix<double>(
+  std::vector<double> matrix2 = fudge::load_matrix<double>(
       "../data/matrix_100x100.txt");
 
   PREPARE_TIMER
   START_TIMER
-    JumpPointMap<double> map(100, 100, matrix2);
-    map.goal_ = Coord(99, 99);
-    std::vector<Coord> &&path = AStarSearch::search(
-        map, Coord(0, 0), Coord(99, 99),
-        GridMap<double>::diagonal_distance);
+    fudge::JumpPointMap<double> map(100, 100, matrix2);
+    map.goal_ = fudge::Coord(99, 99);
+    const std::vector<fudge::Coord> path = fudge::astar_search(
+        map, fudge::Coord(0, 0), fudge::Coord(99, 99),
+        fudge::GridMap<double>::diagonal_distance);
   END_TIMER
   PRINT_TIME_ELAPSED
 

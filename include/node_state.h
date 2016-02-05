@@ -1,5 +1,7 @@
-#ifndef NODE_STATE_H_
-#define NODE_STATE_H_
+#ifndef FUDGE_NODE_STATE_H_
+#define FUDGE_NODE_STATE_H_
+
+namespace fudge {
 
 enum NodeState {
   unexplored  = 0,
@@ -12,4 +14,6 @@ enum NodeState {
   reserved_2  = 7,
 };
 
-#endif /* NODE_STATE_H_ */
+}
+
+#endif /* FUDGE_NODE_STATE_H_ */

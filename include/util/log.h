@@ -1,5 +1,5 @@
-#ifndef LOG_H_
-#define LOG_H_
+#ifndef FUDGE_LOG_H_
+#define FUDGE_LOG_H_
 
 #ifndef LOG_LEVEL
 #define LOG_LEVEL 1
@@ -45,4 +45,4 @@
 #define ERROR(...) ((void)0)
 #endif
 
-#endif /* LOG_H_ */
+#endif /* FUDGE_LOG_H_ */

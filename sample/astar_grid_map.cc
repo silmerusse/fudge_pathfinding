@@ -4,16 +4,19 @@
 #include "load_matrix.h"
 #include "util/time_util.h"
 
-// Find path from start position to target position using A*.
+// Search shortest path using A* algorithm.
 int main (int argc, char *argv[]) {
-  std::vector<double> matrix = load_matrix<double>("../data/matrix_10x10_wall.txt");
+  std::vector<double> matrix = fudge::load_matrix<double>(
+      "../data/matrix_10x10_wall.txt");
+  fudge::GridMap<double> map(10, 10, matrix);
 
   PREPARE_TIMER
   START_TIMER
-  GridMap<double> map(10, 10, matrix);
-  std::vector<Coord> &&path = AStarSearch::search(
-      map, Coord(7, 0), Coord(4, 1),
-      GridMap<double>::diagonal_distance);
+
+  const std::vector<std::pair<int,int>> path = fudge::astar_search(
+      map, fudge::Coord(7, 0), fudge::Coord(4, 1),
+      fudge::GridMap<double>::diagonal_distance);
+
   END_TIMER
   PRINT_TIME_ELAPSED
 

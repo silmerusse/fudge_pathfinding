@@ -1,12 +1,12 @@
 #ifndef FUDGE_PATHFINDING_GUI_FUDGE_EVENT_HANDLER_H_
 #define FUDGE_PATHFINDING_GUI_FUDGE_EVENT_HANDLER_H_
 
-#include "fruitcandy/engine/event_handler.h"
-#include "fruitcandy/engine/object.h"
+#include <fruitcandy/core/event_handler.h>
+#include <fruitcandy/core/object.h>
 
 class FudgeEventHandler : public EventHandler {
 public:
-  FudgeEventHandler(Realm *realm) : EventHandler(realm) {}
+  explicit FudgeEventHandler(Realm *realm) : EventHandler(realm) {}
   virtual ~FudgeEventHandler() = default;
 
 public:

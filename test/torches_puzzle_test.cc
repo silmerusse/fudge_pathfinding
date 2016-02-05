@@ -40,7 +40,7 @@ TEST(TorchesPuzzle, search) {
   for (auto &t : end.pos_)
     t.on_ = true;
 
-  std::vector<TorchesPosition> &&path = AStarSearch::search(
+  const std::vector<TorchesPosition> path = fudge::astar_search(
       map, start, end,
       std::bind(&TorchesPuzzle::heuristic, map,
                 std::placeholders::_1, std::placeholders::_2));

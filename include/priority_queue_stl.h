@@ -1,5 +1,5 @@
-#ifndef PRIORITY_QUEUE_STL_H_
-#define PRIORITY_QUEUE_STL_H_
+#ifndef FUDGE_PRIORITY_QUEUE_STL_H_
+#define FUDGE_PRIORITY_QUEUE_STL_H_
 
 #include <vector>
 #include <string>
@@ -14,6 +14,9 @@
 // "increase priority" operation (percolate up), with the assumption that the
 // STL implementation uses binary heap(tree) algorithm. An alternate safe but
 // slow implementation using make_heap() is also provided for reference.
+
+namespace fudge {
+
 template <typename ElementType, typename PriorityType, typename PriorityHandler>
 class PriorityQueueSTL : public PriorityQueue<ElementType, PriorityType> {
 public:
@@ -78,4 +81,6 @@ public:
   std::vector<ElementType> queue_;
 };
 
-#endif /* PRIORITY_QUEUE_STL_H_ */
+}
+
+#endif /* FUDGE_PRIORITY_QUEUE_STL_H_ */

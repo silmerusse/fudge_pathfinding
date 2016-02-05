@@ -21,7 +21,7 @@ TEST(WaterJugMap, search) {
   PREPARE_TIMER
   START_TIMER
     WaterJugMap map({21, 15, 8, 5});
-    std::vector<WaterJugPosition> &&path = AStarSearch::search(
+    const std::vector<WaterJugPosition> path = fudge::astar_search(
         map, WaterJugPosition({21, 0, 0, 0}),
         WaterJugPosition({7, 7, 7, 0}),
         std::bind(&WaterJugMap::heuristic, map,

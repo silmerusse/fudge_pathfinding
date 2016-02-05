@@ -22,7 +22,7 @@ TEST(SlidingPuzzleMap, search_2x2_not_found) {
   PREPARE_TIMER
   START_TIMER
   SlidingPuzzleMap map(2);
-  std::vector<SlidingPosition> &&path = AStarSearch::search(map,
+  const std::vector<SlidingPosition> path = fudge::astar_search(map,
       SlidingPosition("1230"), SlidingPosition("0231"),
       std::bind(&SlidingPuzzleMap::manhattan_distance, map,
           std::placeholders::_1, std::placeholders::_2));
@@ -40,7 +40,7 @@ TEST(SlidingPuzzleMap, search_3x3_found) {
   PREPARE_TIMER
   START_TIMER
     SlidingPuzzleMap map(3);
-  std::vector<SlidingPosition> &&path = AStarSearch::search(map,
+  const std::vector<SlidingPosition> path = fudge::astar_search(map,
         SlidingPosition("876543210"), SlidingPosition("123456780"),
         std::bind(&SlidingPuzzleMap::manhattan_distance, map,
             std::placeholders::_1, std::placeholders::_2));
@@ -58,7 +58,7 @@ TEST(SlidingPuzzleMap, search_4x4_found) {
   START_TIMER
     SlidingPuzzleMap map(4);
 
-  std::vector<SlidingPosition> &&path = AStarSearch::search(map,
+  const std::vector<SlidingPosition> path = fudge::astar_search(map,
                           SlidingPosition("fedcba9876543210"),
                           SlidingPosition("0fdcbea876953214"),
                           std::bind(&SlidingPuzzleMap::manhattan_distance, map,

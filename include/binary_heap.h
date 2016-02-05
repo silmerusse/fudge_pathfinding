@@ -1,5 +1,5 @@
-#ifndef BINARY_HEAP_H_
-#define BINARY_HEAP_H_
+#ifndef FUDGE_BINARY_HEAP_H_
+#define FUDGE_BINARY_HEAP_H_
 
 #include <vector>
 #include <string>
@@ -9,6 +9,9 @@
 
 // This is an implementation of binary heap, without using STL's priority queue
 // adaptor or heap functions like make_heap(), push_heap(), pop_heap().
+
+namespace fudge{
+
 template <typename ElementType, typename PriorityType, typename PriorityHandler>
 class BinaryHeap : public PriorityQueue<ElementType, PriorityType> {
 public:
@@ -107,4 +110,5 @@ protected:
   }
 };
 
+}
 #endif /* BINARY_HEAP_H_ */

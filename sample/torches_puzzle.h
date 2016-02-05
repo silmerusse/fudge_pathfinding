@@ -19,7 +19,7 @@ public:
   }
 };
 
-class TorchesPosition : public Position<Torch, int, char> {
+class TorchesPosition : public fudge::Position<Torch, int, char> {
 public:
   TorchesPosition(const std::vector<Torch> &torches): Position(torches) {}
   TorchesPosition() {}
@@ -41,7 +41,8 @@ public:
   }
 };
 
-class TorchesPuzzle : public PositionMap<Torch, TorchesPosition, int, char> {
+class TorchesPuzzle 
+  : public fudge::PositionMap<Torch, TorchesPosition, int, char> {
 public:
   TorchesPuzzle() = default;
   virtual ~TorchesPuzzle() = default;
@@ -59,16 +60,16 @@ public:
 
 public:
   // Override to return edges with destination nodes according to four moves.
-  virtual const std::vector<Edge<TorchesPosition, int>> 
-  edges (TorchesPosition &n) override {
-    std::vector<Edge<TorchesPosition, int>> es;
+  virtual const std::vector<fudge::Edge<TorchesPosition, int>> 
+  edges (const TorchesPosition &n) override {
+    std::vector<fudge::Edge<TorchesPosition, int>> es;
     for (auto i = 0; i < n.pos_.size(); ++i) {
       TorchesPosition pos = n;
       for (auto index : pos.pos_[i].controlled_) {
     	 pos.pos_[index].swap();
       }
       pos.pos_[i].swap();
-      es.push_back(Edge<TorchesPosition, int>(n, pos, 1));
+      es.push_back(fudge::Edge<TorchesPosition, int>(n, pos, 1));
     }
     return es;
   }

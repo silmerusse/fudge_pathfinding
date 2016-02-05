@@ -1,8 +1,8 @@
 #ifndef FUDGE_PATHFINDING_GUI_GAME_H_
 #define FUDGE_PATHFINDING_GUI_GAME_H_
 
-#include "fruitcandy/renderable/sprite.h"
-#include "fruitcandy/engine/realm.h"
+#include <fruitcandy/renderable/sprite.h>
+#include <fruitcandy/core/realm.h>
 
 #include "object/airborne.h"
 #include "fudge_event_handler.h"

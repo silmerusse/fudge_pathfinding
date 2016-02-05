@@ -1,5 +1,5 @@
-#ifndef GRID_MAP_H_
-#define GRID_MAP_H_
+#ifndef FUDGE_GRID_MAP_H_
+#define FUDGE_GRID_MAP_H_
 
 #include <algorithm>
 #include <math.h>
@@ -15,6 +15,9 @@
 // This implements a square tile based grid map.
 // It could accept different cost type like int and double.
 // By default diagonal move is allowed.
+
+namespace fudge {
+
 template <typename CostType = double>
 class GridMap : public Map<Coord, CostType> {
 
@@ -56,7 +59,8 @@ public:
     return node(n)->g_;
   }
 
-  virtual const std::vector<Edge<Coord, CostType>> edges(Coord &n) override {
+  virtual const std::vector<Edge<Coord, CostType>> 
+  edges(const Coord &n) override {
     std::vector <Edge<Coord, CostType>> es;
     std::vector<Coord> coords;
 
@@ -82,15 +86,15 @@ public:
     return !open_list_.is_empty();
   }
 
-  virtual bool node_unexplored(const Coord &n) const override {
+  virtual bool is_node_unexplored(const Coord &n) const override {
     return node(n)->state_ == NodeState::unexplored;
   }
 
-  virtual bool node_open(const Coord &n) const override {
+  virtual bool is_node_open(const Coord &n) const override {
     return node(n)->state_ == NodeState::open;
   }
 
-  virtual void open_node(Coord &n, CostType g, CostType h,
+  virtual void open_node(const Coord &n, CostType g, CostType h,
                          const Coord &p) override {
     auto nn = node(n);
     nn->parent_ = node(p);
@@ -102,7 +106,7 @@ public:
     DEBUG("node inserted: %s", node(n)->to_string().c_str());
   }
 
-  virtual void reopen_node(Coord &n, CostType g, CostType h,
+  virtual void reopen_node(const Coord &n, CostType g, CostType h,
                            const Coord &p) override {
     auto nn = node(n);
     nn->parent_ = node(p);
@@ -114,7 +118,7 @@ public:
     DEBUG("node reopened: %s", node(n)->to_string().c_str());
   }
 
-  Coord close_front_open_node() override {
+  Coord take_out_top_node() override {
     GridNode<CostType> *gn = open_list_.remove_front();
     gn->state_ = NodeState::closed;
     stats_.nodes_closed++;
@@ -122,7 +126,7 @@ public:
     return gn->c_;
   }
 
-  virtual void increase_node_priority(Coord &n, CostType g, CostType h,
+  virtual void increase_node_priority(const Coord &n, CostType g, CostType h,
                                       const Coord &p) override {
     auto nn = node(n);
     nn->parent_ = node(p);
@@ -253,5 +257,6 @@ protected:
 
 };
 
+}
 
-#endif /* GRID_MAP_H_ */
+#endif /* FUDGE_GRID_MAP_H_ */

@@ -1,9 +1,11 @@
-#ifndef VERTEX_MATRIX_H_
-#define VERTEX_MATRIX_H_
+#ifndef FUDGE_VERTEX_MATRIX_H_
+#define FUDGE_VERTEX_MATRIX_H_
 
 #include <algorithm>
 #include <string>
 #include <sstream>
+
+namespace fudge {
 
 using Coord = std::pair<int,int>;
 
@@ -61,5 +63,6 @@ private:
   const std::vector<WeightType> &matrix_;
 };
 
+}
 
-#endif /* VERTEX_MATRIX_H_ */
+#endif /* FUDGE_VERTEX_MATRIX_H_ */

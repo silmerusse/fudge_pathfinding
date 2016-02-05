@@ -1,10 +1,12 @@
-#ifndef LOAD_MATRIX_H_
-#define LOAD_MATRIX_H_
+#ifndef FUDGE_LOAD_MATRIX_H_
+#define FUDGE_LOAD_MATRIX_H_
 
 #include <string>
 #include <vector>
 #include <fstream>
 #include "util/log.h"
+
+namespace fudge {
 
 template <typename WeightType>
 static std::vector<WeightType> load_matrix(const std::string &filename) {
@@ -31,5 +33,6 @@ static std::vector<WeightType> load_matrix(const std::string &filename) {
   return v;
 }
 
+}
 
-#endif /* LOAD_MATRIX_H_ */
+#endif /* FUDGE_LOAD_MATRIX_H_ */

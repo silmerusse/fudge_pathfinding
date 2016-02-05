@@ -1,5 +1,5 @@
-#include "fruitcandy/engine/realm.h"
-#include "fruitcandy/math/point_in_rect.h"
+#include <fruitcandy/core/realm.h>
+#include <fruitcandy/math/point_in_rect.h>
 
 #include "object/unit.h"
 #include "game.h"
@@ -11,7 +11,6 @@ void FudgeEventHandler::handle_mouse_button_down(unsigned int button,
   y_ = y;
   Game *game = static_cast<Game*>(realm_);
 
-  DEBUG("InteractionManger::on_mouse_button_down, %d, %d, %d", button, x, y);
   if (button == SDL_BUTTON_LEFT) {
     unselect();
     realm_->repo_->traverse<Unit>("units", std::bind([&](Unit *s) {
@@ -35,7 +34,6 @@ void FudgeEventHandler::handle_mouse_button_down(unsigned int button,
         std::shared_ptr<Event> e =
             std::make_shared<Event>("unit_move_to", x, y);
         u->event_target_->post_event(e);
-        DEBUG("Interaction manager sent out unit_move_to event.");
       }
     }
   }

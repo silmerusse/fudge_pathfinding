@@ -29,11 +29,11 @@ void Unit::on_move_to(const std::shared_ptr<Event> &e) {
   // specified.
   Pos pos (x / game_->grid_width_, y / game_->grid_height_);
   if (get_grid_pos() != pos) {
-    GridMap<double> map(game_->cols_, game_->rows_, game_->matrix_);
+    fudge::GridMap<double> map(game_->cols_, game_->rows_, game_->matrix_);
     Pos start = get_grid_pos();
     target_ = pos;
-    path_ = AStarSearch::search(map, start.to_pair(), target_.to_pair(),
-                                GridMap<double>::diagonal_distance);
+    path_ = fudge::astar_search(map, start.to_pair(), target_.to_pair(),
+                                fudge::GridMap<double>::diagonal_distance);
     INFO("Path re-calculated.");
   }
 }

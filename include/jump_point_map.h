@@ -1,5 +1,5 @@
-#ifndef JUMP_POINT_MAP_H_
-#define JUMP_POINT_MAP_H_
+#ifndef FUDGE_JUMP_POINT_MAP_H_
+#define FUDGE_JUMP_POINT_MAP_H_
 
 #include <algorithm>
 #include "util/log.h"
@@ -7,15 +7,18 @@
 #include "grid_map.h"
 #include "search_stats.h"
 
-using NodeType = Coord;
-
-#define INVALID_NODE Coord(-1, -1)
-
 // This implements a map used for Jump Point Search algorithm.
 // JPS could be based on A* so that we only need to provide a special edges()
 // method to return jump points collected. Additionally we have to utilize
 // initialize() call to mark the goal node on the map so that we could make it a
 // jump point.
+
+namespace fudge {
+
+using NodeType = Coord;
+
+#define INVALID_NODE Coord(-1, -1)
+
 template <typename CostType>
 class JumpPointMap : public GridMap<CostType> {
 public:
@@ -25,7 +28,8 @@ public:
 
 public:
   // Override to return edges with destination nodes that are jump points.
-  const std::vector<Edge<NodeType, CostType>> edges(NodeType &n) override{
+  const std::vector<Edge<NodeType, CostType>> 
+  edges(const NodeType &n) override{
     std::vector <Edge<NodeType, CostType>> es;
 
     // Search and add jump points at all directions for start node.
@@ -166,5 +170,6 @@ protected:
   }
 };
 
+}
 
-#endif /* JUMP_POINT_MAP_H_ */
+#endif /* FUDGE_JUMP_POINT_MAP_H_ */

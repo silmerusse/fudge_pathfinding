@@ -1,9 +1,9 @@
 #include <memory>
 
-#include "fruitcandy/util/log.h"
-#include "fruitcandy/engine/canvas.h"
-#include "fruitcandy/engine/viewport.h"
-#include "fruitcandy/engine/main_loop.h"
+#include <fruitcandy/util/log.h>
+#include <fruitcandy/core/canvas.h>
+#include <fruitcandy/core/viewport.h>
+#include <fruitcandy/core/main_loop.h>
 
 #include "game.h"
 

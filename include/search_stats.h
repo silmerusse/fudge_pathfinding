@@ -1,8 +1,10 @@
-#ifndef SEARCH_STATS_H_
-#define SEARCH_STATS_H_
+#ifndef FUDGE_SEARCH_STATS_H_
+#define FUDGE_SEARCH_STATS_H_
 
 #include <string>
 #include <sstream>
+
+namespace fudge {
 
 class SearchStats {
 public:
@@ -29,4 +31,6 @@ public:
   }
 };
 
-#endif /* SEARCH_STATS_H_ */
+}
+
+#endif /* FUDGE_SEARCH_STATS_H_ */

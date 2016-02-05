@@ -1,5 +1,7 @@
-#ifndef UP_HEAP_H_
-#define UP_HEAP_H_
+#ifndef FUDGE_UP_HEAP_H_
+#define FUDGE_UP_HEAP_H_
+
+namespace fudge {
 
 // Percolate up an element at the index specified.
 template<typename Container, typename ElementType, typename LessPriority>
@@ -34,5 +36,6 @@ static void up_heap(Iterator begin, Iterator it, LessPriority less_priority) {
   *(begin + hole) = value;
 }
 
+}
 
-#endif /* UP_HEAP_H_ */
+#endif /* FUDGE_UP_HEAP_H_ */

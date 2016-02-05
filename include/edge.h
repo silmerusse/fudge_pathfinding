@@ -1,5 +1,7 @@
-#ifndef EDGE_H_
-#define EDGE_H_
+#ifndef FUDGE_EDGE_H_
+#define FUDGE_EDGE_H_
+
+namespace fudge {
 
 template <typename NodeType, typename CostType>
 class Edge {
@@ -19,5 +21,7 @@ public:
   NodeType to_;
   CostType cost_;
 };
+
+}
 
 #endif /* EDGE_H_ */

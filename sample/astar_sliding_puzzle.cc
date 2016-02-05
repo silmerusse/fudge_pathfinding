@@ -13,14 +13,16 @@
 // 456
 // 780
 int main (int argc, char *argv[]) {
-  PREPARE_TIMER
-  START_TIMER
   SlidingPuzzleMap map(3);
 
-  std::vector<SlidingPosition> &&path = AStarSearch::search(
+  PREPARE_TIMER
+  START_TIMER
+
+  const std::vector<SlidingPosition> path = fudge::astar_search(
       map, SlidingPosition("876543210"), SlidingPosition("123456780"),
       std::bind(&SlidingPuzzleMap::manhattan_distance, map,
-          std::placeholders::_1, std::placeholders::_2));
+                std::placeholders::_1, std::placeholders::_2));
+
   END_TIMER
   PRINT_TIME_ELAPSED
 

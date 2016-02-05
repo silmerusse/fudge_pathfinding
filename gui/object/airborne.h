@@ -3,8 +3,9 @@
 
 #include <memory>
 
-#include "fruitcandy/engine/object.h"
-#include "fruitcandy/renderable/sprite.h"
+#include <fruitcandy/core/object.h>
+#include <fruitcandy/renderable/sprite.h>
+
 #include "unit.h"
 
 class Realm;

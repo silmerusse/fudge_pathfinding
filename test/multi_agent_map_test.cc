@@ -36,38 +36,45 @@ void print_result(const std::vector<const MultiAgentNode*> &path,
 
 // Test if hash code works.
 TEST(MultiAgentMap, hash) {
-  auto n0 = MultiAgentNode::create({}, {},
-                          {Agent(0, Pos(0, 0), Pos(1, 0), 1),
-                           Agent(1, Pos(0, 0), Pos(1, 0), 1)});
-  auto n1 = MultiAgentNode::create({},
-           {Move(Agent(0, Pos(0, 0), Pos(1, 0), 1), Pos(1, 0)),
-            Move(Agent(0, Pos(0, 0), Pos(1, 0), 1), Pos(0, 1))},
-           {Agent(0, Pos(0, 0), Pos(1, 0), 1),
-            Agent (1, Pos(0, 0), Pos(1, 0), 1)});
+  auto n0 = MultiAgentNode::create(
+      {}, 
+      {},
+      {Agent(0, Pos(0, 0), Pos(1, 0), 1),
+       Agent(1, Pos(0, 0), Pos(1, 0), 1)});
+  auto n1 = MultiAgentNode::create(
+      {},
+      {Move(Agent(0, Pos(0, 0), Pos(1, 0), 1), Pos(1, 0)),
+       Move(Agent(0, Pos(0, 0), Pos(1, 0), 1), Pos(0, 1))},
+      {Agent(0, Pos(0, 0), Pos(1, 0), 1),
+       Agent (1, Pos(0, 0), Pos(1, 0), 1)});
   ASSERT_EQ(n0->hash(), n1->hash());
 
-  auto n2 = MultiAgentNode::create({},
-           {Move(Agent(0, Pos(0, 0), Pos(1, 0), 1), Pos(1, 0))},
-           {Agent(0, Pos(0, 0), Pos(1, 0), 1),
-            Agent (1, Pos(0, 0), Pos(1, 0), 1)});
+  auto n2 = MultiAgentNode::create(
+      {},
+      {Move(Agent(0, Pos(0, 0), Pos(1, 0), 1), Pos(1, 0))},
+      {Agent(0, Pos(0, 0), Pos(1, 0), 1),
+       Agent (1, Pos(0, 0), Pos(1, 0), 1)});
   ASSERT_EQ(n0->hash(), n2->hash());
 
-  auto n3 = MultiAgentNode::create({
-    Move(Agent(0, Pos(0, 0), Pos(1, 0), 1), Pos(1, 0))},
-    {},
-    {Agent(0, Pos(0, 0), Pos(1, 0), 1),
-     Agent (1, Pos(0, 0), Pos(1, 0), 1)});
+  auto n3 = MultiAgentNode::create(
+      {Move(Agent(0, Pos(0, 0), Pos(1, 0), 1), Pos(1, 0))},
+      {},
+      {Agent(0, Pos(0, 0), Pos(1, 0), 1),
+       Agent (1, Pos(0, 0), Pos(1, 0), 1)});
   ASSERT_NE(n0->hash(), n3->hash());
 
-  auto n4 = MultiAgentNode::create({},{},
-             {Agent(3, Pos(2, 3), Pos(2, 2), 1),
-              Agent(4, Pos(4, 1), Pos(2, 2), 1),
-              Agent(5, Pos(5, 8), Pos(2, 2), 1),
-             });
-  auto n5 = MultiAgentNode::create({}, {},
-             {Agent(3, Pos(2, 3), Pos(2, 2), 1),
-              Agent(4, Pos(4, 1), Pos(2, 2), 1),
-              Agent(5, Pos(5, 8), Pos(2, 2), 1),});
+  auto n4 = MultiAgentNode::create(
+      {},
+      {},
+      {Agent(3, Pos(2, 3), Pos(2, 2), 1),
+       Agent(4, Pos(4, 1), Pos(2, 2), 1),
+       Agent(5, Pos(5, 8), Pos(2, 2), 1)});
+  auto n5 = MultiAgentNode::create(
+      {},
+      {},
+      {Agent(3, Pos(2, 3), Pos(2, 2), 1),
+       Agent(4, Pos(4, 1), Pos(2, 2), 1),
+       Agent(5, Pos(5, 8), Pos(2, 2), 1)});
   ASSERT_EQ(n4->hash(), n5->hash());
 }
 
@@ -82,9 +89,11 @@ TEST(MultiAgentMap, edges) {
 
   MultiAgentMap map(2, 2, matrix);
 
-  auto start = MultiAgentNode::create({}, {},
-                          {Agent(0, Pos(0, 0), Pos(1, 0), 1),
-                           Agent (1, Pos(0, 0), Pos(1, 0), 1)});
+  auto start = MultiAgentNode::create(
+      {},
+      {},
+      {Agent(0, Pos(0, 0), Pos(1, 0), 1),
+       Agent (1, Pos(0, 0), Pos(1, 0), 1)});
   auto end = MultiAgentNode::create();
   map.open_node(start, 0, map.heuristic_rra(start, end), start);
 
@@ -101,22 +110,24 @@ TEST(MultiAgentMap, search_2x1_2_agents) {
 
   MultiAgentMap map(2, 1, matrix);
 
-  auto start = MultiAgentNode::create({}, {},
-                          {Agent(0, Pos(0, 0), Pos(1, 0), 1),
-                           Agent (1, Pos(0, 0), Pos(1, 0), 1)});
+  auto start = MultiAgentNode::create(
+      {}, 
+      {},
+      {Agent(0, Pos(0, 0), Pos(1, 0), 1),
+       Agent (1, Pos(0, 0), Pos(1, 0), 1)});
   auto end = MultiAgentNode::create();
   auto start0 = *start;
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
+  const std::vector<NodeType> path0 = fudge::astar_search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
                     std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  auto &&path = strip_path(path0, &start0);
+  const auto path = strip_path(path0, &start0);
   print_result(path, map);
 
   /*
@@ -136,22 +147,24 @@ TEST(MultiAgentMap, search_2x1_2_agents_chain) {
 
   MultiAgentMap map(2, 1, matrix);
 
-  auto start = MultiAgentNode::create({}, {},
-                          {Agent(0, Pos(0, 0), Pos(1, 0), 1, 1),
-                           Agent (1, Pos(0, 0), Pos(1, 0), 2)});
+  auto start = MultiAgentNode::create(
+      {}, 
+      {},
+      {Agent(0, Pos(0, 0), Pos(1, 0), 1, 1),
+       Agent (1, Pos(0, 0), Pos(1, 0), 2)});
   auto end = MultiAgentNode::create();
   auto start0 = *start;
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
+  const std::vector<NodeType> path0 = fudge::astar_search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
                     std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  auto &&path = strip_path(path0, &start0);
+  const auto path = strip_path(path0, &start0);
   print_result(path, map);
 /*
   []<>{A0|(0,0) B1|(0,0)} --- 0
@@ -168,22 +181,24 @@ TEST(MultiAgentMap, search_2x2_2_agents) {
 
   MultiAgentMap map(2, 2, matrix);
 
-  auto start = MultiAgentNode::create({}, {},
-                          {Agent(0, Pos(0, 0), Pos(1, 1), 1),
-                           Agent (1, Pos(0, 0), Pos(1, 1), 1)});
+  auto start = MultiAgentNode::create(
+      {}, 
+      {},
+      {Agent(0, Pos(0, 0), Pos(1, 1), 1), 
+       Agent (1, Pos(0, 0), Pos(1, 1), 1)});
   auto end = MultiAgentNode::create();
   auto start0 = *start;
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
+  const std::vector<NodeType> path0 = fudge::astar_search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
                     std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  auto &&path = strip_path(path0, &start0);
+  const auto path = strip_path(path0, &start0);
   print_result(path, map);
 
   /*
@@ -201,23 +216,25 @@ TEST(MultiAgentMap, search_2x2_3_agents) {
 
   MultiAgentMap map(2, 2, matrix);
 
-  auto start = MultiAgentNode::create({}, {},
-                          {Agent(0, Pos(0, 0), Pos(1, 1), 1),
-                           Agent (1, Pos(0, 0), Pos(1, 1), 1),
-                           Agent (2, Pos(1, 1), Pos(0, 0), 1)});
+  auto start = MultiAgentNode::create(
+      {}, 
+      {},
+      {Agent(0, Pos(0, 0), Pos(1, 1), 1),
+       Agent (1, Pos(0, 0), Pos(1, 1), 1),
+       Agent (2, Pos(1, 1), Pos(0, 0), 1)});
   auto end = MultiAgentNode::create();
   auto start0 = *start;
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
+  const std::vector<NodeType> path0 = fudge::astar_search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
                     std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  auto &&path = strip_path(path0, &start0);
+  const auto path = strip_path(path0, &start0);
   print_result(path, map);
 
   /*
@@ -233,26 +250,29 @@ TEST(MultiAgentMap, search_2x2_3_agents) {
 // The result should be the same as a normal a* search.
 TEST(MultiAgentMap, search_10x10_1_agent) {
 
-  std::vector<int> matrix = load_matrix<int>("../data/matrix_10x10_plain.txt");
+  std::vector<int> matrix = fudge::load_matrix<int>(
+      "../data/matrix_10x10_plain.txt");
 
   MultiAgentMap map(10, 10, matrix);
 
-  auto start = MultiAgentNode::create({}, {},
-                          {Agent(0, Pos(0, 0), Pos(9, 9), 1),
-                          /* Agent (1, Pos(0, 0), Pos(9, 9), 1)*/});
+  auto start = MultiAgentNode::create(
+      {}, 
+      {},
+      {Agent(0, Pos(0, 0), Pos(9, 9), 1),
+       /* Agent (1, Pos(0, 0), Pos(9, 9), 1)*/});
   auto end = MultiAgentNode::create();
   auto start0 = *start;
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
+  const std::vector<NodeType> path0 = fudge::astar_search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
                     std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  auto &&path = strip_path(path0, &start0);
+  const auto path = strip_path(path0, &start0);
   print_result(path, map);
   /*
   []<>{A0|(0,0)} --- 0
@@ -282,26 +302,29 @@ TEST(MultiAgentMap, search_10x10_1_agent) {
 // The result should be the same as a normal a* search.
 TEST(MultiAgentMap, search_10x10_wall_1_agent) {
 
-  std::vector<int> matrix = load_matrix<int>("../data/matrix_10x10_agents.txt");
+  std::vector<int> matrix = fudge::load_matrix<int>(
+      "../data/matrix_10x10_agents.txt");
 
   MultiAgentMap map(10, 10, matrix);
 
-  auto start = MultiAgentNode::create({}, {},
-                          {Agent(0, Pos(0, 0), Pos(9, 9), 1),
-                          /* Agent (1, Pos(0, 0), Pos(9, 9), 1)*/});
+  auto start = MultiAgentNode::create(
+      {}, 
+      {},
+      {Agent(0, Pos(0, 0), Pos(9, 9), 1),
+       /* Agent (1, Pos(0, 0), Pos(9, 9), 1)*/});
   auto end = MultiAgentNode::create();
   auto start0 = *start;
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
+  const std::vector<NodeType> path0 = fudge::astar_search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
                     std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  auto &&path = strip_path(path0, &start0);
+  const auto path = strip_path(path0, &start0);
   print_result(path, map);
   /*
   []<>{A0|(0,0)} --- 0
@@ -329,26 +352,29 @@ TEST(MultiAgentMap, search_10x10_wall_1_agent) {
 
 // Test 2 agents finding paths in a 10x10 map with obstacles.
 TEST(MultiAgentMap, search_10x10_wall_2_agents) {
-  std::vector<int> matrix = load_matrix<int>("../data/matrix_10x10_agents.txt");
+  std::vector<int> matrix = fudge::load_matrix<int>(
+      "../data/matrix_10x10_agents.txt");
 
   MultiAgentMap map(10, 10, matrix);
 
-  auto start = MultiAgentNode::create({}, {},
-                          {Agent(0, Pos(0, 0), Pos(9, 9), 1),
-                           Agent (1, Pos(0, 0), Pos(9, 9), 1)});
+  auto start = MultiAgentNode::create(
+      {}, 
+      {},
+      {Agent(0, Pos(0, 0), Pos(9, 9), 1),
+       Agent (1, Pos(0, 0), Pos(9, 9), 1)});
   auto end = MultiAgentNode::create();
   auto start0 = *start;
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
+  const std::vector<NodeType> path0 = fudge::astar_search(map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
                     std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  auto &&path = strip_path(path0, &start0);
+  const auto path = strip_path(path0, &start0);
   print_result(path, map);
   /*
   []<>{A0|(0,0) B0|(0,0)} --- 0
@@ -381,22 +407,25 @@ TEST(MultiAgentMap, search_2x2_2_agents_different_speed) {
 
   MultiAgentMap map(2, 2, matrix);
 
-  auto start = MultiAgentNode::create({}, {},
-                          {Agent(0, Pos(0, 0), Pos(1, 1), 1),
-                           Agent (1, Pos(0, 0), Pos(1, 1), 2)});
+  auto start = MultiAgentNode::create(
+      {}, 
+      {},
+      {Agent(0, Pos(0, 0), Pos(1, 1), 1),
+       Agent (1, Pos(0, 0), Pos(1, 1), 2)});
   auto end = MultiAgentNode::create();
   auto start0 = *start;
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
+  const std::vector<NodeType> path0 = fudge::astar_search(
+          map,
           start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
                     std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  auto &&path = strip_path(path0, &start0);
+  const auto path = strip_path(path0, &start0);
   print_result(path, map);
   /*
   []<>{A0|(0,0) B1|(0,0)} --- 0
@@ -414,22 +443,25 @@ TEST(MultiAgentMap, search_2x2_2_agents_different_speed_slower) {
 
   MultiAgentMap map(2, 2, matrix);
 
-  auto start = MultiAgentNode::create({}, {},
-                          {Agent(0, Pos(0, 0), Pos(1, 1), 2),
-                           Agent (1, Pos(0, 0), Pos(1, 1), 3)});
+  auto start = MultiAgentNode::create(
+      {}, 
+      {},
+      {Agent(0, Pos(0, 0), Pos(1, 1), 2),
+       Agent (1, Pos(0, 0), Pos(1, 1), 3)});
   auto end = MultiAgentNode::create();
   auto start0 = *start;
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
-          start, end,
-          std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    std::placeholders::_1, std::placeholders::_2));
+  const std::vector<NodeType> path0 = fudge::astar_search(
+      map,
+      start, end,
+      std::bind(&MultiAgentMap::heuristic_rra, &map,
+                std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  auto &&path = strip_path(path0, &start0);
+  const auto path = strip_path(path0, &start0);
   print_result(path, map);
   /*
   []<>{A1|(0,0) B2|(0,0)} --- 0
@@ -445,26 +477,30 @@ TEST(MultiAgentMap, search_2x2_2_agents_different_speed_slower) {
 
 // Test 2 agents finding paths in different speed in a 10x10 map with obstacles.
 TEST(MultiAgentMap, search_10x10_2_agents_different_speed) {
-  std::vector<int> matrix = load_matrix<int>("../data/matrix_10x10_agents.txt");
+  std::vector<int> matrix = fudge::load_matrix<int>(
+      "../data/matrix_10x10_agents.txt");
 
   MultiAgentMap map(10, 10, matrix);
 
-  auto start = MultiAgentNode::create({}, {},
-                          {Agent(0, Pos(0, 0), Pos(9, 9), 1),
-                           Agent (1, Pos(0, 0), Pos(9, 9), 2)});
+  auto start = MultiAgentNode::create(
+      {}, 
+      {},
+      {Agent(0, Pos(0, 0), Pos(9, 9), 1),
+       Agent (1, Pos(0, 0), Pos(9, 9), 2)});
   auto end = MultiAgentNode::create();
   auto start0 = *start;
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
-          start, end,
-          std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    std::placeholders::_1, std::placeholders::_2));
+  const std::vector<NodeType> path0 = fudge::astar_search(
+      map,
+      start, end,
+      std::bind(&MultiAgentMap::heuristic_rra, &map,
+                std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  auto &&path = strip_path(path0, &start0);
+  const auto path = strip_path(path0, &start0);
   print_result(path, map);
   /*
   []<>{A0|(0,0) B1|(0,0)} --- 0
@@ -511,30 +547,30 @@ TEST(MultiAgentMap, search_10x10_2_agents_different_speed) {
 // Test 6 agents in 2 groups finding paths in different speed in a 10x10 map
 // with obstacles.
 TEST(MultiAgentMap, search_10x10_3_agents) {
-  std::vector<int> matrix = load_matrix<int>("../data/matrix_10x10_agents.txt");
-  //std::vector<int> matrix = load_matrix<int>("../data/matrix_10x10_plain.txt");
+  std::vector<int> matrix = fudge::load_matrix<int>(
+      "../data/matrix_10x10_agents.txt");
 
   MultiAgentMap map(10, 10, matrix);
 
-  auto start = MultiAgentNode::create({}, {},
-                          {
-                           Agent(3, Pos(0, 0), Pos(9, 9), 1),
-                           Agent(4, Pos(0, 0), Pos(9, 9), 1),
-                           Agent(5, Pos(9, 9), Pos(0, 0), 1),
-                          });
+  auto start = MultiAgentNode::create(
+      {}, 
+      {},
+      {Agent(3, Pos(0, 0), Pos(9, 9), 1),
+       Agent(4, Pos(0, 0), Pos(9, 9), 1),
+       Agent(5, Pos(9, 9), Pos(0, 0), 1)});
   auto end = MultiAgentNode::create();
   auto start0 = *start;
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
-          start, end,
-          std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    std::placeholders::_1, std::placeholders::_2));
+  const std::vector<NodeType> path0 = fudge::astar_search(map,
+      start, end,
+      std::bind(&MultiAgentMap::heuristic_rra, &map,
+                std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  auto &&path = strip_path(path0, &start0);
+  const auto path = strip_path(path0, &start0);
   print_result(path, map);
 
   /*
@@ -566,14 +602,16 @@ TEST(MultiAgentMap, search_10x10_3_agents) {
 // with obstacles.
 // All agents except the first one of each group have predecessors.
 TEST(MultiAgentMap, search_10x10_6_agents) {
-  std::vector<int> matrix = load_matrix<int>("../data/matrix_10x10_agents.txt");
-  //std::vector<int> matrix = load_matrix<int>("../data/matrix_10x10_plain.txt");
+  std::vector<int> matrix = fudge::load_matrix<int>(
+      "../data/matrix_10x10_agents.txt");
 
   // Increase heuristic weight to accelerate searching.
   // But the result may not be optimal.
   MultiAgentMap map(10, 10, matrix, 1.25);
 
-  auto start = MultiAgentNode::create({}, {},
+  auto start = MultiAgentNode::create(
+      {},
+      {},
       {Agent(0, Pos(0, 0), Pos(9, 9), 3),
        Agent(1, Pos(0, 0), Pos(9, 9), 2, 0),
        Agent(2, Pos(0, 0), Pos(9, 9), 1, 1),
@@ -586,14 +624,15 @@ TEST(MultiAgentMap, search_10x10_6_agents) {
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
-          start, end,
-          std::bind(&MultiAgentMap::heuristic_rra, &map,
-                    std::placeholders::_1, std::placeholders::_2));
+  const std::vector<NodeType> path0 = fudge::astar_search(
+      map,
+      start, end,
+      std::bind(&MultiAgentMap::heuristic_rra, &map,
+                std::placeholders::_1, std::placeholders::_2));
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  auto &&path = strip_path(path0, &start0);
+  const auto path = strip_path(path0, &start0);
   print_result(path, map);
 
   ASSERT_LE(55, path.size());

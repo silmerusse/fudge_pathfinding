@@ -1,5 +1,5 @@
-#ifndef TIME_UTIL_H_
-#define TIME_UTIL_H_
+#ifndef FUDGE_TIME_UTIL_H_
+#define FUDGE_TIME_UTIL_H_
 
 #include <chrono>
 #include <iostream>
@@ -21,4 +21,4 @@
   std::cout << "Time elapsed: " << end_time - start_time \
       << "ms" << std::endl; \
 
-#endif /* TIME_UTIL_H_ */
+#endif /* FUDGE_TIME_UTIL_H_ */

@@ -3,7 +3,7 @@
 
 #include "position_map.h"
 
-class SlidingPosition : public Position<char, int, std::string> {
+class SlidingPosition : public fudge::Position<char, int, std::string> {
 public:
   SlidingPosition(const std::string &pos) {
     std::copy(pos.begin(), pos.end(), std::back_inserter(pos_));
@@ -22,12 +22,12 @@ public:
 };
 
 class SlidingPuzzleMap : 
-    public PositionMap<char, SlidingPosition, int, std::string> {
+    public fudge::PositionMap<char, SlidingPosition, int, std::string> {
 public:
   SlidingPuzzleMap(int w, int h) : PositionMap(), w_(w), h_(h) {
     open_list_.kc_ = 2;
   }
-  SlidingPuzzleMap(int w) : SlidingPuzzleMap(w, w) {};
+  explicit SlidingPuzzleMap(int w) : SlidingPuzzleMap(w, w) {};
   virtual ~SlidingPuzzleMap() = default;
 
 public:
@@ -51,9 +51,9 @@ public:
 
 public:
   // Override to return edges with destination nodes according to four moves.
-  virtual const std::vector<Edge<SlidingPosition, int>> 
-  edges (SlidingPosition &n) override {
-    std::vector<Edge<SlidingPosition, int>> es;
+  virtual const std::vector<fudge::Edge<SlidingPosition, int>> 
+  edges (const SlidingPosition &n) override {
+    std::vector<fudge::Edge<SlidingPosition, int>> es;
     int i = std::find(n.pos_.begin(), n.pos_.end(), kHole) - n.pos_.begin();
     int x = i % w_;
     int y = i / w_;
@@ -81,12 +81,12 @@ private:
   // Helper to create a position node and an edge according to the move.
   // Arguments @i and @j are the index of characters to be swapped.
   // Push the edge to the container.
-  void push_edge(std::vector<Edge<SlidingPosition, int>> &es,
+  void push_edge(std::vector<fudge::Edge<SlidingPosition, int>> &es,
 		  	  	 const SlidingPosition &source, int i, int j) {
     SlidingPosition position = source;
     position.pos_[i] = position.pos_[j];
     position.pos_[j] = kHole;
-    Edge<SlidingPosition, int> e(source, position, 1);
+    fudge::Edge<SlidingPosition, int> e(source, position, 1);
     es.push_back(e);
   }
 };

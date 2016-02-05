@@ -1,11 +1,13 @@
-#ifndef GRID_NODE_H_
-#define GRID_NODE_H_
+#ifndef FUDGE_GRID_NODE_H_
+#define FUDGE_GRID_NODE_H_
 
 #include <algorithm>
 #include <sstream>
 #include <string>
 #include "node_state.h"
 #include "map.h"
+
+namespace fudge {
 
 using Coord=std::pair<int,int>;
 
@@ -83,4 +85,5 @@ public:
 
 };
 
-#endif /* GRID_NODE_H_ */
+}
+#endif /* FUDGE_GRID_NODE_H_ */

@@ -33,7 +33,8 @@ void print_result(const std::vector<const MultiAgentNode*> &path,
 // 6 agents in 2 groups find paths with different speed in a 10x10 map with
 // obstacles. All agents except the first one of each group have predecessors.
 int main (int argc, char *argv[]) {
-  std::vector<int> matrix = load_matrix<int>("../data/matrix_10x10_agents.txt");
+  std::vector<int> matrix = fudge::load_matrix<int>(
+      "../data/matrix_10x10_agents.txt");
 
   MultiAgentMap map(10, 10, matrix, 1);
 
@@ -50,10 +51,12 @@ int main (int argc, char *argv[]) {
 
   PREPARE_TIMER
   START_TIMER
-  std::vector<NodeType> &&path0 = AStarSearch::search(map,
-          start, end,
+
+  const std::vector<NodeType> path0 = fudge::astar_search(
+          map, start, end,
           std::bind(&MultiAgentMap::heuristic_rra, &map,
                     std::placeholders::_1, std::placeholders::_2));
+
   END_TIMER
   PRINT_TIME_ELAPSED
 

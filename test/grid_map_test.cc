@@ -5,8 +5,8 @@
 #include "util/time_util.h"
 
 // Helper to print and return result.
-const std::string print_result(const std::vector<Coord> &path,
-                               const GridMap<double> &map) {
+const std::string print_result(const std::vector<fudge::Coord> &path,
+                               const fudge::GridMap<double> &map) {
   std::cout << "--------------------\n";
   std::ostringstream ss;
   for (auto i = path.rbegin(); i != path.rend(); ++i)
@@ -17,19 +17,19 @@ const std::string print_result(const std::vector<Coord> &path,
 }
 
 TEST(GridMap, search_10x10) {
-  std::vector<double> matrix = load_matrix<double>(
+  std::vector<double> matrix = fudge::load_matrix<double>(
       "../data/matrix_10x10_plain.txt");
 
   PREPARE_TIMER
   START_TIMER
-    GridMap<double> map(10, 10, matrix);
-    std::vector<Coord> &&path = AStarSearch::search(
-        map, Coord(0, 0), Coord(9, 9),
-        GridMap<double>::diagonal_distance);
+    fudge::GridMap<double> map(10, 10, matrix);
+    const std::vector<fudge::Coord> path0 = fudge::astar_search(
+        map, fudge::Coord(0, 0), fudge::Coord(9, 9),
+        fudge::GridMap<double>::diagonal_distance);
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  std::string result = print_result(path, map);
+  std::string result = print_result(path0, map);
 
   std::string expected = std::string("") +
       "(1,1)<-(0,0) g:1.4143 f:12.7287"  + "\n" +
@@ -64,13 +64,14 @@ TEST(GridMap, search_10x10) {
    * Second search.
    */
   START_TIMER
-    GridMap<double> map2(10, 10, matrix);
-    path = AStarSearch::search(map2, Coord(9, 0), Coord(0, 9),
-                               GridMap<double>::duclidean_distance);
+    fudge::GridMap<double> map2(10, 10, matrix);
+    const std::vector<fudge::Coord> path1 = fudge::astar_search(
+        map2, fudge::Coord(9, 0), fudge::Coord(0, 9),
+        fudge::GridMap<double>::duclidean_distance);
   END_TIMER
   PRINT_TIME_ELAPSED
 
-  std::string result2 = print_result(path, map2);
+  std::string result2 = print_result(path1, map2);
 
   std::string expected2 = std::string("") +
       "(8,1)<-(9,0) g:1.4143 f:12.728"   + "\n" +
@@ -105,14 +106,15 @@ TEST(GridMap, search_10x10) {
 
 
 TEST(GridMap, search_100x100) {
-  std::vector<double> matrix = load_matrix<double>("../data/matrix_100x100.txt");
+  std::vector<double> matrix = fudge::load_matrix<double>(
+      "../data/matrix_100x100.txt");
 
   PREPARE_TIMER
   START_TIMER
-    GridMap<double> map(100, 100, matrix);
-    std::vector<Coord> &&path = AStarSearch::search(map,
-        Coord(0, 0), Coord(99, 99),
-        GridMap<double>::diagonal_distance);
+    fudge::GridMap<double> map(100, 100, matrix);
+    const std::vector<fudge::Coord> path = fudge::astar_search(map,
+        fudge::Coord(0, 0), fudge::Coord(99, 99),
+        fudge::GridMap<double>::diagonal_distance);
   END_TIMER
   PRINT_TIME_ELAPSED
 
@@ -125,25 +127,26 @@ TEST(GridMap, search_100x100) {
 // Test search paths of 2 targets by reusing the map.
 // The second round that reuse intermediate result would open less nodes.
 TEST(GridMap, search_10x10_2_targets) {
-  std::vector<double> matrix = load_matrix<double>("../data/matrix_10x10_wall.txt");
+  std::vector<double> matrix = fudge::load_matrix<double>(
+      "../data/matrix_10x10_wall.txt");
 
   // Round 1. Direct search.
   PREPARE_TIMER
   START_TIMER
-    GridMap<double> map0(10, 10, matrix);
-    std::vector<Coord> &&path0 = AStarSearch::search(
-        map0, Coord(0, 0), Coord(9, 9),
-        GridMap<double>::diagonal_distance);
+    fudge::GridMap<double> map0(10, 10, matrix);
+    const std::vector<fudge::Coord> path0 = fudge::astar_search(
+        map0, fudge::Coord(0, 0), fudge::Coord(9, 9),
+        fudge::GridMap<double>::diagonal_distance);
   END_TIMER
   PRINT_TIME_ELAPSED
   std::string result0 = print_result(path0, map0);
 
   // Round 2. Start by searching a intermediate path.
   START_TIMER
-    GridMap<double> map1(10, 10, matrix);
-    std::vector<Coord> &&path1 = AStarSearch::search(
-        map1, Coord(0, 0), Coord(4, 4),
-        GridMap<double>::diagonal_distance);
+    fudge::GridMap<double> map1(10, 10, matrix);
+    const std::vector<fudge::Coord> path1 = fudge::astar_search(
+        map1, fudge::Coord(0, 0), fudge::Coord(4, 4),
+        fudge::GridMap<double>::diagonal_distance);
   END_TIMER
   PRINT_TIME_ELAPSED
   std::string result1 = print_result(path1, map1);
@@ -151,9 +154,9 @@ TEST(GridMap, search_10x10_2_targets) {
   // Reuse map.
   map1.stats_.reset();
   START_TIMER
-    std::vector<Coord> &&path2 = AStarSearch::search(
-        map1, Coord(0, 0), Coord(9, 9),
-        GridMap<double>::diagonal_distance);
+    const std::vector<fudge::Coord> path2 = fudge::astar_search(
+        map1, fudge::Coord(0, 0), fudge::Coord(9, 9),
+        fudge::GridMap<double>::diagonal_distance);
   END_TIMER
   PRINT_TIME_ELAPSED
   std::string result2 = print_result(path2, map1);

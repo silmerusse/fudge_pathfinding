@@ -5,8 +5,8 @@
 #include <vector>
 #include <SDL2/SDL.h>
 
-#include "fruitcandy/engine/object.h"
-#include "fruitcandy/math/vector2D.h"
+#include <fruitcandy/core/object.h>
+#include <fruitcandy/math/vector2D.h>
 
 class Game;
 

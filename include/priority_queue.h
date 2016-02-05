@@ -1,6 +1,8 @@
 #ifndef PRIORITY_QUEUE_H_
 #define PRIORITY_QUEUE_H_
 
+namespace fudge {
+
 template <typename N, typename P>
 class PriorityQueue {
 public:
@@ -32,5 +34,6 @@ public:
   virtual std::size_t size() const = 0;
 };
 
+}
 
 #endif /* PRIORITY_QUEUE_H_ */

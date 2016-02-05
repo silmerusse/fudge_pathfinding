@@ -28,7 +28,7 @@ static const std::string stringify(const Q &q) {
 }
 
 TEST(BinaryHeap, insert_remove_increase_int) {
-  BinaryHeap<int, int, ScalarPriority<int>> q;
+  fudge::BinaryHeap<int, int, ScalarPriority<int>> q;
   q.insert(10);
   ASSERT_EQ("10,", stringify(q));
   q.insert(50);
@@ -111,33 +111,34 @@ TEST(BinaryHeap, increase_priority_node_int) {
   using C = std::pair<int,int>;
   using CostType = int;
 
-  BinaryHeap<GridNode<CostType>*, int, GridNode<CostType>> q;
+  fudge::BinaryHeap<fudge::GridNode<CostType>*, int, 
+                    fudge::GridNode<CostType>> q;
 
-  GridNode<CostType> n00(C(0,0), 10);
+  fudge::GridNode<CostType> n00(C(0,0), 10);
   q.insert(&n00);
   ASSERT_EQ("10,", stringify(q));
 
-  GridNode<CostType> n10(C(1,0), 50);
+  fudge::GridNode<CostType> n10(C(1,0), 50);
   q.insert(&n10);
   ASSERT_EQ("10,50,", stringify(q));
 
-  GridNode<CostType> n20(C(2,0), 30);
+  fudge::GridNode<CostType> n20(C(2,0), 30);
   q.insert(&n20);
   ASSERT_EQ("10,50,30,", stringify(q));
 
-  GridNode<CostType> n30(C(3,0), 20);
+  fudge::GridNode<CostType> n30(C(3,0), 20);
   q.insert(&n30);
   ASSERT_EQ("10,20,30,50,", stringify(q));
 
-  GridNode<CostType> n40(C(4,0), 15);
+  fudge::GridNode<CostType> n40(C(4,0), 15);
   q.insert(&n40);
   ASSERT_EQ("10,15,30,50,20,", stringify(q));
 
-  GridNode<CostType> n50(C(5,0), 40);
+  fudge::GridNode<CostType> n50(C(5,0), 40);
   q.insert(&n50);
   ASSERT_EQ("10,15,30,50,20,40,", stringify(q));
 
-  GridNode<CostType> n60(C(6,0), 5);
+  fudge::GridNode<CostType> n60(C(6,0), 5);
   q.insert(&n60);
   ASSERT_EQ("5,15,10,50,20,40,30,", stringify(q));
   /*
@@ -184,12 +185,13 @@ TEST(BinaryHeap, increase_priority_node_double) {
   using C = std::pair<int,int>;
   using CostType = double;
 
-  BinaryHeap<GridNode<CostType>*, CostType, GridNode<CostType>> q;
+  fudge::BinaryHeap<fudge::GridNode<CostType>*, CostType, 
+                    fudge::GridNode<CostType>> q;
 
   /*
   [D] node inserted: coord:(0,0)<-(-1,-1) g:0 f:12.7279
   */
-  GridNode<CostType> n00(C(0,0), 12.7279);
+  fudge::GridNode<CostType> n00(C(0,0), 12.7279);
   q.insert(&n00);
   ASSERT_EQ("12.7279,", stringify(q));
 
@@ -204,15 +206,15 @@ TEST(BinaryHeap, increase_priority_node_double) {
   [D] node inserted: coord:(0,1)<-(0,0) g:1 f:13.0416
   [D] node inserted: coord:(1,1)<-(0,0) g:1.4143 f:12.728
   */
-  GridNode<CostType> n10(C(1,0), 13.0416);
+  fudge::GridNode<CostType> n10(C(1,0), 13.0416);
   q.insert(&n10);
   ASSERT_EQ("13.0416,", stringify(q));
 
-  GridNode<CostType> n01(C(0,1), 13.0416);
+  fudge::GridNode<CostType> n01(C(0,1), 13.0416);
   q.insert(&n01);
   ASSERT_EQ("13.0416,13.0416,", stringify(q));
 
-  GridNode<CostType> n11(C(1,1), 12.728);
+  fudge::GridNode<CostType> n11(C(1,1), 12.728);
   q.insert(&n11);
   ASSERT_EQ("12.728,13.0416,13.0416,", stringify(q));
 
@@ -228,19 +230,19 @@ TEST(BinaryHeap, increase_priority_node_double) {
   [D] node inserted: coord:(0,2)<-(1,1) g:2.8286 f:14.2304
   [D] node inserted: coord:(1,2)<-(1,1) g:3.4143 f:14.0444
   */
-  GridNode<CostType> n20(C(2,0), 14.2304);
+  fudge::GridNode<CostType> n20(C(2,0), 14.2304);
   q.insert(&n20);
   ASSERT_EQ("13.0416,13.0416,14.2304,", stringify(q));
 
-  GridNode<CostType> n21(C(2,1), 13.0444);
+  fudge::GridNode<CostType> n21(C(2,1), 13.0444);
   q.insert(&n21);
   ASSERT_EQ("13.0416,13.0416,14.2304,13.0444,", stringify(q));
 
-  GridNode<CostType> n02(C(0,2), 14.2304);
+  fudge::GridNode<CostType> n02(C(0,2), 14.2304);
   q.insert(&n02);
   ASSERT_EQ("13.0416,13.0416,14.2304,13.0444,14.2304,", stringify(q));
 
-  GridNode<CostType> n12(C(1,2), 14.0444);
+  fudge::GridNode<CostType> n12(C(1,2), 14.0444);
   q.insert(&n12);
   ASSERT_EQ("13.0416,13.0416,14.0444,13.0444,14.2304,14.2304,",
       stringify(q));
@@ -321,11 +323,11 @@ TEST(BinaryHeap, increase_priority_node_double) {
   [D] node inserted: coord:(3,0)<-(2,1) g:8.0715 f:18.8882
   [D] node inserted: coord:(3,2)<-(2,1) g:9.4858 f:18.7053
   */
-   GridNode<CostType> n30(C(3,0), 18.8882);
+   fudge::GridNode<CostType> n30(C(3,0), 18.8882);
    q.insert(&n30);
    ASSERT_EQ("13.4018,13.4018,14.0444,18.8882,", stringify(q));
 
-   GridNode<CostType> n32(C(3,2), 18.7053);
+   fudge::GridNode<CostType> n32(C(3,2), 18.7053);
    q.insert(&n32);
    ASSERT_EQ("13.4018,13.4018,14.0444,18.8882,18.7053,", stringify(q));
    /*

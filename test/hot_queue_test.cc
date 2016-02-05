@@ -38,8 +38,8 @@ const std::string stringify(const Q &q) {
 }
 
 TEST(HotQueue, insert_remove_increase_int) {
-  HotQueue<int, int, ScalarPriority<int>,
-    PriorityQueueSTL<int,int,ScalarPriority<int>>> q(4);
+  fudge::HotQueue<int, int, ScalarPriority<int>,
+                  fudge::PriorityQueueSTL<int,int,ScalarPriority<int>>> q(4);
   q.insert(10);
   ASSERT_EQ("10,\n", stringify(q));
 

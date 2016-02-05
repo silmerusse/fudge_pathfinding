@@ -12,6 +12,8 @@
 #include "hot_queue.h"
 #include "binary_heap.h"
 
+namespace fudge {
+
 template<typename T, typename CostType, typename HashType>
 class Position {
 public:
@@ -68,11 +70,11 @@ public:
     return n0.hash() == n1.hash();
   }
 
-  virtual bool node_unexplored(const NodeType &n) const override {
+  virtual bool is_node_unexplored(const NodeType &n) const override {
     return map_.find(n.hash()) == map_.end();
   }
 
-  virtual bool node_open(const NodeType &n) const override {
+  virtual bool is_node_open(const NodeType &n) const override {
     return map_.at(n.hash()).state_ == NodeState::open;
   }
 
@@ -81,46 +83,47 @@ public:
   }
 
   // Operations
-  virtual void open_node(NodeType &n, CostType g, CostType h, 
+  virtual void open_node(const NodeType &n, CostType g, CostType h, 
                          const NodeType &p) override {
-    n.parent_ = p.hash();
-    n.g_ = g;
-    n.cost_ = g + h;
-    n.state_ = NodeState::open;
-    open_list_.insert(n);
-    map_[n.hash()] = n;
+    NodeType nn(n);
+    nn.parent_ = p.hash();
+    nn.g_ = g;
+    nn.cost_ = g + h;
+    nn.state_ = NodeState::open;
+    open_list_.insert(nn);
+    map_[n.hash()] = nn;
     stats_.nodes_opened++;
-    DEBUG("Node opened: %s, %d, %d", n.to_string().c_str(), n.g_, n.cost_);
+    DEBUG("Node opened: %s, %d, %d", nn.to_string().c_str(), nn.g_, nn.cost_);
   }
 
-  virtual void reopen_node(NodeType &n, int g, int h, 
+  virtual void reopen_node(const NodeType &n, int g, int h, 
                            const NodeType &p) override {
-	  n.parent_ = p.hash();
-	  n.g_ = g;
-	  n.cost_ = g + h;
-	  n.state_ = NodeState::open;
-	  open_list_.insert(n);
-	  map_[n.hash()] = n;
+    NodeType nn(n);
+	  nn.parent_ = p.hash();
+	  nn.g_ = g;
+	  nn.cost_ = g + h;
+	  nn.state_ = NodeState::open;
+	  open_list_.insert(nn);
+	  map_[nn.hash()] = nn;
 	  stats_.nodes_opened++;
-	  DEBUG("Node reopened: %s, %d, %d", n.to_string().c_str(), n.g_, n.cost_);
+	  DEBUG("Node reopened: %s, %d, %d", nn.to_string().c_str(), nn.g_, nn.cost_);
   }
 
-  virtual NodeType close_front_open_node() override {
+  virtual NodeType take_out_top_node() override {
     NodeType n = open_list_.remove_front();
     map_.at(n.hash()).state_ = NodeState::closed;
     stats_.nodes_closed++;
-    DEBUG("Node closed: %s, %d, %d", n.to_string().c_str(), n.g_, n.cost_);
+    DEBUG("Node closed: %s, %d, %d", nn.to_string().c_str(), nn.g_, nn.cost_);
     return n;
   }
 
-  virtual void increase_node_priority(NodeType &n, CostType g, CostType h,
+  virtual void increase_node_priority(const NodeType &n, CostType g, CostType h,
                                       const NodeType &p) override {
-    NodeType &old = map_.at(n.hash());
-    open_list_.increase_priority(old, g + h);
-    n.parent_ = p.hash();
-    n.g_ = g;
-    n.cost_ = g + h;
-    map_[n.hash()] = n;
+    NodeType &nn = map_.at(n.hash());
+    open_list_.increase_priority(nn, g + h);
+    nn.parent_ = p.hash();
+    nn.g_ = g;
+    nn.cost_ = g + h;
     stats_.nodes_priority_increased++;
     DEBUG("Node priority increased: %s, %d, %d", n.to_string().c_str(), 
           n.g_, n.cost_);
@@ -150,5 +153,7 @@ protected:
   HotQueue<NodeType, CostType, PositionMap,
       BinaryHeap<NodeType, CostType, PositionMap>> open_list_;
 };
+
+}
 
 #endif /* POSITION_MAP_H_ */
