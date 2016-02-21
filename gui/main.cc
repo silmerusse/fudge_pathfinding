@@ -1,8 +1,10 @@
 #include <memory>
-#include "log.h"
-#include "canvas.h"
+
+#include "fruitcandy/util/log.h"
+#include "fruitcandy/engine/canvas.h"
+#include "fruitcandy/engine/viewport.h"
+
 #include "game.h"
-#include "viewport.h"
 
 int main() {
 
@@ -15,42 +17,49 @@ int main() {
   constexpr int kHeight = kGridHeight * kRows;
 
   // Create UI.
-  Canvas canvas;
-  if (!canvas.init("fudge", kWidth, kHeight)) {
+  Canvas canvas(kWidth, kHeight);
+  if (!canvas.init("fudge")) {
     ERROR("Failed to initialize canvas.");
-    return -1;
+    return EXIT_FAILURE;
   };
 
-  // Load textures.
-  std::unique_ptr<TextureManager> texture_manager(new TextureManager());
-  if (!texture_manager->load_textures(canvas.renderer_,
-                        {{"tile", "img/tile.png"},
-                         {"wall", "img/wall.png"},
-                         {"unit", "img/unit.png"}})) {
-    ERROR("Failed to load textures.");
-    return -1;
+  // Load realm.
+  Game game(kWidth, kHeight, canvas.get_graphics());
+  if (!game.load_assets("../data")) {
+    ERROR("Failed to load assets.");
+    return EXIT_FAILURE;
   }
 
-  std::unique_ptr<InteractionManager>
-  interaction_manager(new InteractionManager());
+  if (!game.initialize_assets()) {
+    ERROR("Failed to initialize assets.");
+    return EXIT_FAILURE;
+  }
 
-  // Load game.
-  Game game(kWidth, kHeight, texture_manager, interaction_manager);
-  game.initialize_objects("data", kCols, kRows, kGridWidth, kGridHeight);
+  if (!game.initialize_objects("../data", kCols, kRows, kGridWidth, kGridHeight)) {
+    ERROR("Failed to initialize objects.");
+    return EXIT_FAILURE;
+  }
 
   // Setup a viewport.
-  std::unique_ptr<Viewport> v(new Viewport(SDL_Rect{0, 0, kWidth, kHeight}));
-  std::unique_ptr<Camera> camera(new Camera(SDL_Rect{0, 0, kWidth, kHeight},
-                                            &game,
-                                            {"tiles", "units", "airbornes"}));
-  v->observe(std::move(camera));
+  std::unique_ptr<Viewport> viewport(
+    new Viewport(canvas.get_graphics(), SDL_Rect{0, 0, kWidth, kHeight}));
+  std::unique_ptr<Camera> camera(
+    new Camera(SDL_Rect{0, 0, kWidth, kHeight},
+               &game,
+               {"tiles", "units", "airbornes"}, 
+               std::unique_ptr<FudgeInteractionManager>(
+                 new FudgeInteractionManager(&game))));
+
+  viewport->observe(std::move(camera));
 
   // Add the viewport to canvas.
-  canvas.add_panel(std::move(v));
+  canvas.add_panel(std::move(viewport));
 
   // Main loop.
   SDL_Event e;
+  Uint32 start = SDL_GetTicks(); // Start timer.
   bool running = true;
+
   while(running) {
     // Handle events.
     while(SDL_PollEvent(&e) != 0) {
@@ -63,13 +72,19 @@ int main() {
       }
     }
 
-    // Tick and render everything.
-    game.tick();
-    canvas.render();
+    Uint32 now = SDL_GetTicks();
+    if (now - start >= 10) { // Timeout. Not likely > 49 days.
+      start = now;
+
+      // Tick and render everything.
+      game.tick(now);
+      canvas.update();
+      canvas.render();
+    }
 
     // Pace control.
     SDL_Delay(100);
   }
 
-  return 0;
+  return EXIT_SUCCESS;
 }

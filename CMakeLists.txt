@@ -11,7 +11,6 @@ include_directories(
   "include/util"
 )
 
-
 add_subdirectory(sample)
 add_subdirectory(test)
 add_subdirectory(gui)

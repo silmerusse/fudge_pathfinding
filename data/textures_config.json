@@ -1,0 +1,17 @@
+[
+{
+  "id": 1,
+  "name": "tile",
+  "path": "../img/tile.png"
+},
+{
+  "id": 2,
+  "name": "wall",
+  "path": "../img/wall.png"
+},
+{
+  "id": 3,
+  "name": "unit",
+  "path": "../img/unit.png"
+}
+]

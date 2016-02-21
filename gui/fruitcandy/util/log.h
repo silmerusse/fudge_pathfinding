@@ -1,8 +1,8 @@
-#ifndef LOG_H_
-#define LOG_H_
+#ifndef FRUITCANDY_UTIL_LOG_H_
+#define FRUITCANDY_UTIL_LOG_H_
 
 #ifndef LOG_LEVEL
-#define LOG_LEVEL 1
+#define LOG_LEVEL 0
 #endif
 
 #if LOG_LEVEL == 0
@@ -45,4 +45,4 @@
 #define ERROR(...) ((void)0)
 #endif
 
-#endif /* LOG_H_ */
+#endif /* FRUITCANDY_UTIL_LOG_H_ */
