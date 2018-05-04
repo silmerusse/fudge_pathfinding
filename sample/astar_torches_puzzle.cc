@@ -1,3 +1,4 @@
+#include <functional>
 #include <memory>
 #include <iostream>
 #include "astar_search.h"

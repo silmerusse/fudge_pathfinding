@@ -1,3 +1,4 @@
+#include <functional>
 #include <memory>
 #include <iostream>
 #include "water_jug_map.h"

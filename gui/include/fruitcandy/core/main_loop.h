@@ -1,6 +1,7 @@
 #ifndef FRUITCANDY_CORE_MAINLOOP_H_
 #define FRUITCANDY_CORE_MAINLOOP_H_
 
+#include <functional>
 #include "canvas.h"
 #include "scene_manager.h"
 

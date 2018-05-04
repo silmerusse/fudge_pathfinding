@@ -1,3 +1,4 @@
+#include <functional>
 #include <memory>
 #include <iostream>
 #include "sliding_puzzle_map.h"

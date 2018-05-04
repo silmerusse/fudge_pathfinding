@@ -6,6 +6,7 @@
 #include <deque>
 #include <set>
 #include <memory>
+#include <functional>
 
 #include "event.h"
 
